@@ -2,7 +2,7 @@
 {
     public class AuditResponse
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string UserId { get; set; }
         public string Type { get; set; }
         public string TableName { get; set; }

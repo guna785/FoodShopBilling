@@ -11,7 +11,7 @@ namespace FoodShopBilling.Application.Interfaces.Services.Identity
     {
         Task<DataTablesJsonResult> GetPaginatedAsync(IDataTablesRequest request);
         Task<Result<List<UserResponse>>> GetAllAsync();
-        Task<Result<int>> DeleteUser(string userId);
+        Task<Result<int>> DeleteUser(int userId);
         Task<int> GetCountAsync();
 
         Task<IResult<UserResponse>> GetAsync(string userId);

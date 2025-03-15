@@ -3,7 +3,7 @@ namespace FoodShopBilling.Application.Interfaces.Services
 {
     public interface ICurrentUserService : IService
     {
-        string UserId { get; }
+        int UserId { get; }
         string UserName { get; }
         string IpAddress { get; }
         bool IsAdmin { get; }
