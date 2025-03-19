@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FoodShopBilling.Infrastructure.Models.Audit;
-using FoodShopBilling.Application.Responses.Audit;
+using FoodShopBilling.Utilities.Responses.Audit;
 
 namespace FoodShopBilling.Infrastructure.Mappings
 {

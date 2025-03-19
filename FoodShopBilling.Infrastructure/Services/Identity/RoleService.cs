@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using FoodShopBilling.Application.Interfaces.Services;
 using FoodShopBilling.Application.Interfaces.Services.Identity;
-using FoodShopBilling.Application.Requests.Identity;
-using FoodShopBilling.Application.Responses.Identity;
 using FoodShopBilling.Shared.Constants.Permission;
 using FoodShopBilling.Shared.Constants.Role;
 using FoodShopBilling.Shared.Wrapper;
@@ -17,6 +15,8 @@ using FoodShopBilling.Infrastructure.Specifications;
 using FoodShopBilling.Application.Extensions;
 using System.Linq.Expressions;
 using FoodShopBilling.Infra.Infrastructure.Specifications;
+using FoodShopBilling.Utilities.Responses.Identity;
+using FoodShopBilling.Utilities.Requests.Identity;
 
 namespace FoodShopBilling.Infrastructure.Services.Identity
 {

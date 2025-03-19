@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using FoodShopBilling.Application.Interfaces.Services;
 using FoodShopBilling.Application.Interfaces.Services.Account;
-using FoodShopBilling.Application.Requests.Identity;
 using FoodShopBilling.Shared.Wrapper;
+using FoodShopBilling.Utilities.Requests.Identity;
 
 namespace FoodShopBilling.Infrastructure.Services.Identity
 {

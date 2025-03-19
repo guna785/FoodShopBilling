@@ -67,7 +67,7 @@ namespace FoodShopBilling.Infrastructure.Services.Identity
                 user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
                 _ = await _userManager.UpdateAsync(user);
                 _logger.LogInformation("Generating Token Started.");
-                string token = await GenerateJwtAsync(user, model.ApplicationType);
+                string token = await GenerateJwtAsync(user);
                 _logger.LogInformation("Token Generation Successfully. Token : {token}.", token);
                 string img = "";
                 if (!string.IsNullOrWhiteSpace(user.ProfilePictureDataUrl))
@@ -75,7 +75,7 @@ namespace FoodShopBilling.Infrastructure.Services.Identity
                     byte[] bytes = await File.ReadAllBytesAsync(user.ProfilePictureDataUrl!);
                     img = Convert.ToBase64String(bytes);
                 }
-                TokenResponse response = new() { Token = token, Claims = await GetClaimsAsync(user, model.ApplicationType), RefreshToken = user.RefreshToken, UserImageURL = img };
+                TokenResponse response = new() { Token = token, Claims = await GetClaimsAsync(user), RefreshToken = user.RefreshToken, UserImageURL = img };
                 _logger.LogInformation("Token Response : {response}.", Newtonsoft.Json.JsonConvert.SerializeObject(response));
                 return await Result<TokenResponse>.SuccessAsync(response);
             }
@@ -121,7 +121,7 @@ namespace FoodShopBilling.Infrastructure.Services.Identity
                 return await Result<TokenResponse>.FailAsync(_localizer["Invalid Client Token."]);
             }
             _logger.LogInformation("Token Generation Started");
-            string token = GenerateEncryptedToken(GetSigningCredentials(), await GetClaimsAsync(user, model.ApplicationType));
+            string token = GenerateEncryptedToken(GetSigningCredentials(), await GetClaimsAsync(user));
             user.RefreshToken = GenerateRefreshToken();
             _ = await _userManager.UpdateAsync(user);
 
@@ -130,13 +130,13 @@ namespace FoodShopBilling.Infrastructure.Services.Identity
             return await Result<TokenResponse>.SuccessAsync(response);
         }
 
-        private async Task<string> GenerateJwtAsync(ApplicationUser user, string applicationType)
+        private async Task<string> GenerateJwtAsync(ApplicationUser user)
         {
-            string token = GenerateEncryptedToken(GetSigningCredentials(), await GetClaimsAsync(user, applicationType));
+            string token = GenerateEncryptedToken(GetSigningCredentials(), await GetClaimsAsync(user));
             return token;
         }
 
-        private async Task<IEnumerable<Claim>> GetClaimsAsync(ApplicationUser user, string ApplicationType)
+        private async Task<IEnumerable<Claim>> GetClaimsAsync(ApplicationUser user)
         {
             IList<Claim> userClaims = await _userManager.GetClaimsAsync(user);
             IList<string> roles = await _userManager.GetRolesAsync(user);
@@ -156,8 +156,7 @@ namespace FoodShopBilling.Infrastructure.Services.Identity
                 new(ClaimTypes.Email, user.Email),
                 new(ClaimTypes.Name, user.UserName),
                 new(ClaimTypes.Surname, $"{user.Name}"),
-                new(ClaimTypes.MobilePhone, user.PhoneNumber ?? string.Empty),
-                new(ClaimTypes.GroupSid,ApplicationType)
+                new(ClaimTypes.MobilePhone, user.PhoneNumber ?? string.Empty)
             }
             .Union(userClaims)
             .Union(roleClaims)

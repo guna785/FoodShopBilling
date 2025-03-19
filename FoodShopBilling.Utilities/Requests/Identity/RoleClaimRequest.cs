@@ -2,8 +2,8 @@
 {
     public class RoleClaimRequest
     {
-        public string Id { get; set; }
-        public string RoleId { get; set; }
+        public int Id { get; set; }
+        public int RoleId { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
         public string Description { get; set; }

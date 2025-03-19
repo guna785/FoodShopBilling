@@ -1,6 +1,7 @@
-﻿using FoodShopBilling.Application.Interfaces.Serialization.Serializers;
+﻿
 using FoodShopBilling.Application.Interfaces.Services.Storage;
 using FoodShopBilling.Application.Interfaces.Services.Storage.Provider;
+using FoodShopBilling.Utilities.Interfaces.Serialization.Serializers;
 using System.Text.Json;
 
 namespace FoodShopBilling.Infrastructure.Services.Storage

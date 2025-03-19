@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FoodShopBilling.Utilities.Interfaces.Serialization.Serializers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using FoodShopBilling.Application.Interfaces.Serialization.Serializers;
-
 namespace FoodShopBilling.Infrastructure.Extensions
 {
     public static class ValueConversionExtensions

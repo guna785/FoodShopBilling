@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FoodShopBilling.Infrastructure.Models.Identity;
-using FoodShopBilling.Application.Responses.Identity;
+using FoodShopBilling.Utilities.Responses.Identity;
 
 namespace FoodShopBilling.Infrastructure.Mappings
 {
