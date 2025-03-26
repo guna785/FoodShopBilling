@@ -18,8 +18,5 @@
     <ProjectReference Include="..\FoodShopBilling.Domain\FoodShopBilling.Domain.csproj" />
     <ProjectReference Include="..\FoodShopBilling.Shared\FoodShopBilling.Shared.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Responses\Features\" />
-  </ItemGroup>
 
 </Project>

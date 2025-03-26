@@ -45,14 +45,9 @@ namespace FoodShopBilling.Shared.Constants.Application
         }
         public static class Cache
         {
-            public const string GetAllConsumerCacheKey = "all-consumers";
-            public const string GetAllConsumerPermissionCacheKey = "all-consumers-permissions";
-            public const string GetAllLocationCacheKey = "all-locations";
-            public const string GetAllDeviceCacheKey = "all-devices";
-            public const string GetAllToMailSettingCacheKey = "all-to-mailsettings";
-            public const string GetAllStaffCacheKey = "all-staffs";
-            public const string GetAllStudentCacheKey = "all-students";
-            public const string GetAllDeviceGroupCacheKey = "get-device-group";
+            public const string GetAllProductCategoryCacheKey = "all-product-categories";
+            public const string GetAllProductsCacheKey = "all-products";
+            public const string GetAllSalesCacheKey = "all-sales";
         }
 
         public static class MimeTypes

@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="LazyCache" Version="2.4.0" />
 		<PackageReference Include="MediatR" Version="12.4.1" />
 		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.0.2" />
 		<PackageReference Include="DataTables.AspNet.AspNetCore" Version="2.0.2" />

@@ -1,48 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:food_shopping/Views/Components/Home.dart';
-import 'package:food_shopping/Views/Components/ProductCategories.dart';
-import 'package:food_shopping/Views/Components/Products.dart';
-import 'package:food_shopping/Views/Components/Sales.dart';
-import 'package:food_shopping/Views/Shared/AppBarLayout.dart';
+import 'package:food_shopping/Controllers/menu_app_controller.dart';
+import 'package:food_shopping/Views/Screens/dashboard_screen.dart';
 import 'package:food_shopping/Views/Shared/DrawerLayout.dart';
+import 'package:food_shopping/responsive.dart';
+import 'package:provider/provider.dart';
 
-class MasterLayout extends StatefulWidget {
+class MasterLayout extends StatelessWidget {
   const MasterLayout({super.key});
-
-  @override
-  State<MasterLayout> createState() => _MasterLayoutState();
-}
-
-class _MasterLayoutState extends State<MasterLayout> {
-  Widget currentPage = const Home();
-
   void _onDrawerItemClick({required String clickedIndex}) {
-    setState(() {
-      switch (clickedIndex) {
-        case "Home":
-          currentPage = const Home();
-          break;
-        case "Products":
-          currentPage = const Products();
-          break;
-        case "Product Category":
-          currentPage = const Productcategories();
-          break;
-        case "Sales":
-          currentPage = const Sales();
-          break;
-        default:
-          currentPage = const Home();
-          break;
-      }
-    });
+
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: context.read<MenuAppController>().scaffoldKey,
       drawer: DrawerLayout(onDrawerItemClick: _onDrawerItemClick),
-      appBar: const AppBarLayout(),
-      body: SafeArea(child: currentPage),
+      body: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // We want this side menu only for large screen
+            if (Responsive.isDesktop(context))
+              Expanded(
+                // default flex = 1
+                // and it takes 1/6 part of the screen
+                child: DrawerLayout(onDrawerItemClick: _onDrawerItemClick),
+              ),
+            Expanded(
+              // It takes 5/6 part of the screen
+              flex: 5,
+              child: DashboardScreen(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
