@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:food_shopping/responsive.dart';
 
 class DrawerLayout extends StatelessWidget {
   const DrawerLayout({super.key, required this.onDrawerItemClick});
@@ -14,42 +17,82 @@ class DrawerLayout extends StatelessWidget {
           DrawerListTile(
             title: "Dashboard",
             svgSrc: "assets/icons/menu_dashboard.svg",
-            press: () {},
+            press: () {
+              onDrawerItemClick(clickedIndex: "Home");
+               if (!Responsive.isDesktop(context)) {
+                Navigator.pop(context);
+              }
+            },
           ),
           DrawerListTile(
-            title: "Transaction",
+            title: "Sales",
             svgSrc: "assets/icons/menu_tran.svg",
-            press: () {},
+            press: () {
+              onDrawerItemClick(clickedIndex: "Sales");
+               if (!Responsive.isDesktop(context)) {
+                Navigator.pop(context);
+              }
+            },
           ),
           DrawerListTile(
-            title: "Task",
+            title: "Products",
             svgSrc: "assets/icons/menu_task.svg",
-            press: () {},
+            press: () {
+              onDrawerItemClick(clickedIndex: "Products");
+               if (!Responsive.isDesktop(context)) {
+                Navigator.pop(context);
+              }
+            },
           ),
           DrawerListTile(
-            title: "Documents",
+            title: "Product Category",
             svgSrc: "assets/icons/menu_doc.svg",
-            press: () {},
+            press: () {
+              onDrawerItemClick(clickedIndex: "Product Category");
+               if (!Responsive.isDesktop(context)) {
+                Navigator.pop(context);
+              }
+            },
           ),
           DrawerListTile(
-            title: "Store",
+            title: "Users",
             svgSrc: "assets/icons/menu_store.svg",
-            press: () {},
+            press: () {
+              onDrawerItemClick(clickedIndex: "Users");
+              if (!Responsive.isDesktop(context)) {
+                Navigator.pop(context);
+              }
+            },
           ),
           DrawerListTile(
-            title: "Notification",
+            title: "Roles",
             svgSrc: "assets/icons/menu_notification.svg",
-            press: () {},
+            press: () {
+              onDrawerItemClick(clickedIndex: "Roles");
+              if (!Responsive.isDesktop(context)) {
+                Navigator.pop(context);
+              }
+            },
           ),
           DrawerListTile(
-            title: "Profile",
+            title: "Reporting",
             svgSrc: "assets/icons/menu_profile.svg",
-            press: () {},
+            press: () {
+              onDrawerItemClick(clickedIndex: "Reporting");
+               if (!Responsive.isDesktop(context)) {
+                Navigator.pop(context);
+              }
+            },
           ),
           DrawerListTile(
-            title: "Settings",
+            title: "Audit Trails",
             svgSrc: "assets/icons/menu_setting.svg",
-            press: () {},
+            press: () {
+              onDrawerItemClick(clickedIndex: "AuditTrails");
+               if (!Responsive.isDesktop(context)) {
+                Navigator.pop(context);
+              }
+            },
           ),
         ],
       ),
@@ -58,7 +101,7 @@ class DrawerLayout extends StatelessWidget {
 }
 
 class DrawerListTile extends StatelessWidget {
-  const DrawerListTile({
+   const DrawerListTile({
     Key? key,
     // For selecting those three line once press "Command+D"
     required this.title,
@@ -86,4 +129,3 @@ class DrawerListTile extends StatelessWidget {
     );
   }
 }
-
