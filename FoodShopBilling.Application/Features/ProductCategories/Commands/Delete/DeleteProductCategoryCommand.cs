@@ -26,15 +26,13 @@ namespace FoodShopBilling.Application.Features.ProductCategories.Commands.Delete
         private readonly IUnitOfWork<int> _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<DeleteProductCategoryCommandHandler> _logger;
-        private readonly IValidator<DeleteProductCategoryCommand> _addEditProductCategoryCommandValidator;
 
-        public DeleteProductCategoryCommandHandler(IStringLocalizer<DeleteProductCategoryCommandHandler> localize, IUnitOfWork<int> unitOfWork, IMapper mapper, ILogger<DeleteProductCategoryCommandHandler> logger, IValidator<DeleteProductCategoryCommand> addEditProductCategoryCommandValidator)
+        public DeleteProductCategoryCommandHandler(IStringLocalizer<DeleteProductCategoryCommandHandler> localize, IUnitOfWork<int> unitOfWork, IMapper mapper, ILogger<DeleteProductCategoryCommandHandler> logger)
         {
             _localize = localize;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
-            _addEditProductCategoryCommandValidator = addEditProductCategoryCommandValidator;
         }
         public async Task<Result<int>> Handle(DeleteProductCategoryCommand request, CancellationToken cancellationToken)
         {

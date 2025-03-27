@@ -27,15 +27,15 @@ namespace FoodShopBilling.Application.Features.ProductCategories.Commands.AddEdi
         private readonly IUnitOfWork<int> _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<AddEditProductCategoryCommandHandler> _logger;
-        private readonly IValidator<AddEditProductCategoryCommand> _addEditDeparmentCommandValidator;
+        private readonly IValidator<AddEditProductCategoryCommand> _addEditProductCategoryCommandValidator;
 
-        public AddEditProductCategoryCommandHandler(IStringLocalizer<AddEditProductCategoryCommandHandler> localize, IUnitOfWork<int> unitOfWork, IMapper mapper, ILogger<AddEditProductCategoryCommandHandler> logger, IValidator<AddEditDeparmentCommand> addEditDeparmentCommandValidator)
+        public AddEditProductCategoryCommandHandler(IStringLocalizer<AddEditProductCategoryCommandHandler> localize, IUnitOfWork<int> unitOfWork, IMapper mapper, ILogger<AddEditProductCategoryCommandHandler> logger, IValidator<AddEditProductCategoryCommand> addEditProductCategoryCommandValidator)
         {
             _localize = localize;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
-            _addEditDeparmentCommandValidator = addEditDeparmentCommandValidator;
+            _addEditProductCategoryCommandValidator = addEditProductCategoryCommandValidator;
         }
 
         public async Task<Result<int>> Handle(AddEditProductCategoryCommand request, CancellationToken cancellationToken)
@@ -43,7 +43,7 @@ namespace FoodShopBilling.Application.Features.ProductCategories.Commands.AddEdi
             try
             {
                 _logger.LogInformation("ProductCategory Add/Update Validation Started");
-                var validationResult = _addEditDeparmentCommandValidator.Validate(request);
+                var validationResult = _addEditProductCategoryCommandValidator.Validate(request);
                 if (validationResult.IsValid)
                 {
                     _logger.LogInformation("ProductCategory Validation Succeed...");

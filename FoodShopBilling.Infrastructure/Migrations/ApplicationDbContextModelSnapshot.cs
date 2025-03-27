@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FoodShopBilling.Infra.Infrastructure.Migrations
+namespace FoodShopBilling.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -17,2418 +17,169 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.AccessDevice", b =>
+            modelBuilder.Entity("FoodShopBilling.Domain.Entities.ProductCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AdminCount")
-                        .HasColumnType("int");
-
-                    b.Property<byte>("ApplicationType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("AttPhotoStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BaudRate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ComPort")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CommKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConnectionType")
-                        .HasColumnType("nvarchar(max)");
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceActivationCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceDirection")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceIpAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("DeviceType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("DownLoadType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("FaceCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FpCount")
-                        .HasColumnType("int");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastLogDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastLogDownloadDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastPing")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LocationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Mac")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("OpLogCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OpStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Port")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PwdCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecordCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SerialNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TimeZone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TransactionStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserCount")
-                        .HasColumnType("int");
-
-                    b.Property<byte>("category")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("accessDevice", (string)null);
+                    b.ToTable("ProductCategory", (string)null);
                 });
 
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.BiometricData", b =>
+            modelBuilder.Entity("FoodShopBilling.Domain.Entities.Products", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Bio")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("BioId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BioType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BioVersion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmployeeCodeInDevice")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Group")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Size")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("biometricData", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.CanteenStaffAccessDeviceStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessDeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccessDeviceId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("canteenStaffAccessDeviceStatus", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.CanteenStaffAttendanceLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConsumerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceIpAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mac")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PunchTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Sync")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("idwDay")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwHour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwInOutMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMinute")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMonth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwSecond")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwVerifyMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwWorkcode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwYear")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("canteenStaffAttendanceLog", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.CanteenStudentAccessDeviceStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessDeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccessDeviceId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("canteenStudentAccessDeviceStatus", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.CanteenStudentAttendanceLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConsumerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceIpAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mac")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PunchTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Sync")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("idwDay")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwHour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwInOutMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMinute")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMonth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwSecond")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwVerifyMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwWorkcode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwYear")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("canteenStudentAttendanceLog", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.DeviceCommands", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeviceCommand")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ExecutionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SerialNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("deviceCommands", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.DeviceOperationLogTypes", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceOperationLogCode")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceOperationLogName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("deviceOperationLogTypes", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.DeviceOperationLogs", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceOperationLogCode")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DeviceOperationLogExecutedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeviceSno")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("deviceOperationLogs", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.DeviceStaffUserGroupMap", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceUserGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceUserGroupId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("deviceStaffUserGroupMap", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.DeviceStudentUserGroupMap", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceUserGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceUserGroupId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("deviceStudentUserGroupMap", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.DeviceUserGroup", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<byte>("ApplicationType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("ProductCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("deviceUserGroup", (string)null);
+                    b.HasIndex("ProductCategoryId");
+
+                    b.ToTable("Products", (string)null);
                 });
 
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.GroupDeviceAccessMap", b =>
+            modelBuilder.Entity("FoodShopBilling.Domain.Entities.Sales", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
+                    b.Property<string>("CustomerMobile")
+                        .HasColumnType("longtext");
 
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("NetAmount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("PaymentMode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeviceId");
+                    b.HasIndex("ProductId");
 
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("groupDeviceAccessMap", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LabStaffAccessDeviceStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessDeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccessDeviceId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("labStaffAccessDeviceStatus", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LabStaffAccessLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConsumerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceIpAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mac")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PunchTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Sync")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("idwDay")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwHour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwInOutMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMinute")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMonth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwSecond")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwVerifyMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwWorkcode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwYear")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("labStaffAccessLog", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LabStudentAccessDeviceStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessDeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccessDeviceId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("labStudentAccessDeviceStatus", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LabStudentAccessLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConsumerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceIpAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mac")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PunchTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Sync")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("idwDay")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwHour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwInOutMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMinute")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMonth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwSecond")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwVerifyMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwWorkcode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwYear")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("labStudentAccessLog", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LibraryStaffAccessDeviceStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessDeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccessDeviceId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("libraryStaffAccessDeviceStatus", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LibraryStaffDeviceAccessLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConsumerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceIpAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mac")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PunchTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Sync")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("idwDay")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwHour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwInOutMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMinute")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMonth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwSecond")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwVerifyMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwWorkcode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwYear")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("libraryStaffAccessLog", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LibraryStudentAccessDeviceStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessDeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccessDeviceId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("libraryStudentAccessDeviceStatus", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LibraryStudentAccessLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConsumerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceIpAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mac")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PunchTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Sync")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("idwDay")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwHour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwInOutMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMinute")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMonth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwSecond")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwVerifyMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwWorkcode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwYear")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("libraryStudentAccessLog", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.Location", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<byte>("ApplicationType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("location", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.ServiceNotification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<byte>("ApplicationType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("ViewedUsers")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("serviceNotification", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.SpectraBiometricData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("Finger")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte>("Quality")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("StudentCard")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("spectraBiometricData", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.SpectraDeviceAccessLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CourseCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PunchTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RollNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StaffId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StaffName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Sync")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("spectraDeviceAccessLog", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.SpectraStaffBiometricData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("Finger")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte>("Quality")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("StaffCard")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("spectraStaffBiometricData", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.Staff", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Balance")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateOfJoining")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Department")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmpId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("EmployeeCardNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeDeviceGroup")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeDevicePassword")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeRFIDNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("Gender")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFaceRegistered")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFingerRegistered")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("iPrevilage")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmpId")
-                        .IsUnique();
-
-                    b.ToTable("staff", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StaffAccessDeviceStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessDeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccessDeviceId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("staffAccessDeviceStatus", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StaffDeviceAccessLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConsumerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceIpAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mac")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PunchTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Sync")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("idwDay")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwHour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwInOutMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMinute")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMonth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwSecond")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwVerifyMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwWorkcode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwYear")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("staffAccessLog", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<double>("Balance")
-                        .HasColumnType("float");
-
-                    b.Property<bool>("CanteenIsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateOfCompletion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateOfJoining")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Degree")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Dept")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeCardNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeDeviceGroup")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeDevicePassword")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeRFIDNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("Gender")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFaceRegistered")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFingerRegistered")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsLocationChanged")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocationId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LocationName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RegSem")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RegYear")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RollNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("iPrevilage")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RollNo")
-                        .IsUnique();
-
-                    b.ToTable("student", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StudentAccessDeviceStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AccessDeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccessDeviceId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("studentAccessDeviceStatus", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StudentCourse", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CourseId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CourseName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RegYear")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("currentSem")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId")
-                        .IsUnique();
-
-                    b.ToTable("studentCourse", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StudentCourseMap", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentCourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentCourseId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("studentCourseMap", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StudentDeviceAccessLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConsumerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeviceIpAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DeviceName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LocationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Mac")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PunchTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Sync")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("idwDay")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwHour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwInOutMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMinute")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwMonth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwSecond")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwVerifyMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwWorkcode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwYear")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeviceId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("studentAccessLog", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.ToMailSettings", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<byte>("ApplicationType")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SendingType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ToMailSettings", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.UserBiometricData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("bEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("iFlag")
-                        .HasColumnType("int");
-
-                    b.Property<int>("iPrivilege")
-                        .HasColumnType("int");
-
-                    b.Property<int>("iTmpLength")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idwFingerIndex")
-                        .HasColumnType("int");
-
-                    b.Property<string>("sName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("sPassword")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("sTmpData")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("sdwEnrollNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("userBiometricData", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.UserCardData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("bEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("iPrivilege")
-                        .HasColumnType("int");
-
-                    b.Property<string>("sCardnumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("sName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("sPassword")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("sdwEnrollNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("userCardData", (string)null);
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.UserFaceData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("aiData")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("bEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("iFaceIndex")
-                        .HasColumnType("int");
-
-                    b.Property<int>("iLength")
-                        .HasColumnType("int");
-
-                    b.Property<int>("iPrivilege")
-                        .HasColumnType("int");
-
-                    b.Property<string>("sName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("sPassword")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("sTmpData")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("sUserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("userFaceData", (string)null);
+                    b.ToTable("Sales", (string)null);
                 });
 
             modelBuilder.Entity("FoodShopBilling.Infrastructure.Models.Audit.Audit", b =>
@@ -2437,33 +188,33 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AffectedColumns")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("NewValues")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("OldValues")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PrimaryKey")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("TableName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -2476,50 +227,49 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("Roles", "Identity");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("FoodShopBilling.Infrastructure.Models.Identity.ApplicationRoleClaim", b =>
@@ -2528,37 +278,37 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Group")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -2567,7 +317,7 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("RoleClaims", "Identity");
+                    b.ToTable("RoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("FoodShopBilling.Infrastructure.Models.Identity.ApplicationUser", b =>
@@ -2576,97 +326,97 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Designation")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<byte>("Gender")
-                        .HasColumnType("tinyint");
+                        .HasColumnType("tinyint unsigned");
 
                     b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(128)");
 
                     b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ProfilePictureDataUrl")
                         .HasColumnType("text");
 
                     b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
 
@@ -2675,10 +425,9 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("Users", "Identity");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
@@ -2687,13 +436,13 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -2702,19 +451,19 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClaims", "Identity");
+                    b.ToTable("UserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -2723,7 +472,7 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogins", "Identity");
+                    b.ToTable("UserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
@@ -2738,7 +487,7 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles", "Identity");
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
@@ -2747,449 +496,39 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UserTokens", "Identity");
+                    b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.AccessDevice", b =>
+            modelBuilder.Entity("FoodShopBilling.Domain.Entities.Products", b =>
                 {
-                    b.HasOne("FoodShopBilling.Domain.Entities.Location", "location")
-                        .WithMany("AccessDevices")
-                        .HasForeignKey("LocationId")
+                    b.HasOne("FoodShopBilling.Domain.Entities.ProductCategory", "ProductCategory")
+                        .WithMany("Products")
+                        .HasForeignKey("ProductCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("location");
+                    b.Navigation("ProductCategory");
                 });
 
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.CanteenStaffAccessDeviceStatus", b =>
+            modelBuilder.Entity("FoodShopBilling.Domain.Entities.Sales", b =>
                 {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "accessDevice")
+                    b.HasOne("FoodShopBilling.Domain.Entities.Products", "Product")
                         .WithMany()
-                        .HasForeignKey("AccessDeviceId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FoodShopBilling.Domain.Entities.Staff", "consumer")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("accessDevice");
-
-                    b.Navigation("consumer");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.CanteenStaffAttendanceLog", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Staff");
-
-                    b.Navigation("device");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.CanteenStudentAccessDeviceStatus", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "accessDevice")
-                        .WithMany()
-                        .HasForeignKey("AccessDeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "consumer")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("accessDevice");
-
-                    b.Navigation("consumer");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.CanteenStudentAttendanceLog", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "Student")
-                        .WithMany("CanteenStudentAttendanceLogs")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-
-                    b.Navigation("device");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.DeviceStaffUserGroupMap", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.DeviceUserGroup", "DeviceUserGroup")
-                        .WithMany("DeviceStaffUserGroupMaps")
-                        .HasForeignKey("DeviceUserGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DeviceUserGroup");
-
-                    b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.DeviceStudentUserGroupMap", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.DeviceUserGroup", "DeviceUserGroup")
-                        .WithMany("DeviceStudentUserGroupMaps")
-                        .HasForeignKey("DeviceUserGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DeviceUserGroup");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.GroupDeviceAccessMap", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "AccessDevice")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.DeviceUserGroup", "Group")
-                        .WithMany("GroupDeviceAccessMaps")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AccessDevice");
-
-                    b.Navigation("Group");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LabStaffAccessDeviceStatus", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "accessDevice")
-                        .WithMany()
-                        .HasForeignKey("AccessDeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Staff", "consumer")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("accessDevice");
-
-                    b.Navigation("consumer");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LabStaffAccessLog", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Staff", "Staff")
-                        .WithMany("LabStaffAccessLogs")
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Staff");
-
-                    b.Navigation("device");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LabStudentAccessDeviceStatus", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "accessDevice")
-                        .WithMany()
-                        .HasForeignKey("AccessDeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "consumer")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("accessDevice");
-
-                    b.Navigation("consumer");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LabStudentAccessLog", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-
-                    b.Navigation("device");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LibraryStaffAccessDeviceStatus", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "accessDevice")
-                        .WithMany()
-                        .HasForeignKey("AccessDeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Staff", "consumer")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("accessDevice");
-
-                    b.Navigation("consumer");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LibraryStaffDeviceAccessLog", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Staff", "Staff")
-                        .WithMany("LibraryStaffAccessLogs")
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Staff");
-
-                    b.Navigation("device");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LibraryStudentAccessDeviceStatus", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "accessDevice")
-                        .WithMany()
-                        .HasForeignKey("AccessDeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "consumer")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("accessDevice");
-
-                    b.Navigation("consumer");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.LibraryStudentAccessLog", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-
-                    b.Navigation("device");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.SpectraBiometricData", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "Student")
-                        .WithMany("SpectraBiometricDatas")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.SpectraDeviceAccessLog", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "Student")
-                        .WithMany("DeviceAccessLogs")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-
-                    b.Navigation("device");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.SpectraStaffBiometricData", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StaffAccessDeviceStatus", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "accessDevice")
-                        .WithMany()
-                        .HasForeignKey("AccessDeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Staff", "consumer")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("accessDevice");
-
-                    b.Navigation("consumer");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StaffDeviceAccessLog", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Staff", "Staff")
-                        .WithMany("DeviceAccessLogs")
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Staff");
-
-                    b.Navigation("device");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StudentAccessDeviceStatus", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "accessDevice")
-                        .WithMany()
-                        .HasForeignKey("AccessDeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-
-                    b.Navigation("accessDevice");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StudentCourseMap", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.StudentCourse", "StudentCourse")
-                        .WithMany()
-                        .HasForeignKey("StudentCourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-
-                    b.Navigation("StudentCourse");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.StudentDeviceAccessLog", b =>
-                {
-                    b.HasOne("FoodShopBilling.Domain.Entities.AccessDevice", "device")
-                        .WithMany()
-                        .HasForeignKey("DeviceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodShopBilling.Domain.Entities.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-
-                    b.Navigation("device");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("FoodShopBilling.Infrastructure.Models.Identity.ApplicationRoleClaim", b =>
@@ -3245,36 +584,9 @@ namespace FoodShopBilling.Infra.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.DeviceUserGroup", b =>
+            modelBuilder.Entity("FoodShopBilling.Domain.Entities.ProductCategory", b =>
                 {
-                    b.Navigation("DeviceStaffUserGroupMaps");
-
-                    b.Navigation("DeviceStudentUserGroupMaps");
-
-                    b.Navigation("GroupDeviceAccessMaps");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.Location", b =>
-                {
-                    b.Navigation("AccessDevices");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.Staff", b =>
-                {
-                    b.Navigation("DeviceAccessLogs");
-
-                    b.Navigation("LabStaffAccessLogs");
-
-                    b.Navigation("LibraryStaffAccessLogs");
-                });
-
-            modelBuilder.Entity("FoodShopBilling.Domain.Entities.Student", b =>
-                {
-                    b.Navigation("CanteenStudentAttendanceLogs");
-
-                    b.Navigation("DeviceAccessLogs");
-
-                    b.Navigation("SpectraBiometricDatas");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("FoodShopBilling.Infrastructure.Models.Identity.ApplicationRole", b =>

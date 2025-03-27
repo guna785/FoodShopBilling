@@ -5,8 +5,7 @@ using FoodShopBilling.Utilities.Requests.Identity;
 namespace FoodShopBilling.Utilities.Validators.Requests
 {
     public class UpdatePasswordRequestValidator : AbstractValidator<UpdatePasswordRequest>
-    {
-      
+    {      
         public UpdatePasswordRequestValidator(IStringLocalizer<UpdatePasswordRequestValidator> localizer)
         {
             _ = RuleFor(request => request.NewPassword)

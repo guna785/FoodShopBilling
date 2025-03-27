@@ -24,9 +24,11 @@ class RecentFiles extends StatelessWidget {
             "Recent Files",
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          SizedBox(
+        SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child:   SizedBox(
             width: double.infinity,
-            child: DataTable(
+            child:  DataTable(
               columnSpacing: defaultPadding,
               // minWidth: 600,
               columns: [
@@ -45,7 +47,7 @@ class RecentFiles extends StatelessWidget {
                 (index) => recentFileDataRow(demoRecentFiles[index]),
               ),
             ),
-          ),
+          ))
         ],
       ),
     );

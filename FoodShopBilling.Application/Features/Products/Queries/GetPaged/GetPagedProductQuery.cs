@@ -44,16 +44,14 @@ namespace FoodShopBilling.Application.Features.Products.Queries.GetPaged
         private readonly IUnitOfWork<int> _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<GetPagedProductQueryHandler> _logger;
-        private readonly IValidator<GetPagedProductCategoryQuery> _addEditProductCategoryCommandValidator;
         private readonly IAppCache _cache;
-        public GetPagedProductQueryHandler(IStringLocalizer<GetPagedProductQueryHandler> localize, IAppCache cache, IUnitOfWork<int> unitOfWork, IMapper mapper, ILogger<GetPagedProductQueryHandler> logger, IValidator<GetPagedProductCategoryQuery> addEditProductCategoryCommandValidator)
+        public GetPagedProductQueryHandler(IStringLocalizer<GetPagedProductQueryHandler> localize, IAppCache cache, IUnitOfWork<int> unitOfWork, IMapper mapper, ILogger<GetPagedProductQueryHandler> logger)
         {
             _localize = localize;
             _cache = cache;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
-            _addEditProductCategoryCommandValidator = addEditProductCategoryCommandValidator;
         }
         public async Task<PaginatedResult<ProductResponse>> Handle(GetPagedProductQuery request, CancellationToken cancellationToken)
         {
@@ -64,6 +62,11 @@ namespace FoodShopBilling.Application.Features.Products.Queries.GetPaged
                     Id = e.Id,
                     Name = e.Name,
                     Description = e.Description,
+                    Tax = e.Tax,
+                    ProductCategoryId = e.ProductCategoryId,
+                    ProductCategoryName = e.ProductCategory.Name,
+                    Price = e.Price,
+                    ImageUrl = e.ImageUrl
                 };
                 ProductFilterSpecification ManualFilterSpec = new(request.SearchString);
                 if (request.OrderBy?.Any() != true)

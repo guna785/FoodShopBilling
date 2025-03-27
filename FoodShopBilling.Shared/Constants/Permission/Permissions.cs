@@ -10,119 +10,44 @@ namespace FoodShopBilling.Shared.Constants.Permission
 {
     public static class Permissions
     {
-        [DisplayName("Reporting")]
-        [Description("Reporting Permissions")]
-        public static class Reporting
+
+        [DisplayName("Product")]
+        [Description("Product Permissions")]
+        public static class Product
         {
-            public const string View = "Permissions.Reporting.View";
-            public const string DailyReport = "Permissions.Reporting.DailyReport";
-            public const string NotPunched = "Permissions.Reporting.NotPunched";
-            public const string OverAllReporting = "Permissions.Reporting.OverAllReporting";
-        }
-        [DisplayName("ToMailSetting")]
-        [Description("ToMailSetting Permissions")]
-        public static class ToMailSetting
-        {
-            public const string View = "Permissions.ToMailSetting.View";
-            public const string Edit = "Permissions.ToMailSetting.Edit";
-            public const string Create = "Permissions.ToMailSetting.Create";
-            public const string Delete = "Permissions.ToMailSetting.Delete";
-            public const string Export = "Permissions.ToMailSetting.Export";
-            public const string Search = "Permissions.ToMailSetting.Search";
-        }
-        [DisplayName("AccessLog")]
-        [Description("AccessLog Permissions")]
-        public static class AccessLog
-        {
-            public const string View = "Permissions.AccessLog.View";
-            public const string Create = "Permissions.AccessLog.Create";
-            public const string Delete = "Permissions.AccessLog.Delete";
-            public const string Export = "Permissions.AccessLog.Export";
-            public const string Search = "Permissions.AccessLog.Search";
-            public const string DownloadLogs = "Permissions.AccessLog.DownloadLogs";
+            public const string View = "Permissions.Product.View";
+            public const string Create = "Permissions.Product.Create";
+            public const string BulkUpload = "Permissions.Product.BulkUpload";
+            public const string Edit = "Permissions.Product.Edit";
+            public const string Delete = "Permissions.Product.Delete";
+            public const string Export = "Permissions.Product.Export";
+            public const string Search = "Permissions.Product.Search";
         }
 
-        [DisplayName("Staff")]
-        [Description("Staff Permissions")]
-        public static class Staff
+        [DisplayName("ProductCategory")]
+        [Description("ProductCategory Permissions")]
+        public static class ProductCategory
         {
-            public const string View = "Permissions.Staff.View";
-            public const string Create = "Permissions.Staff.Create";
-            public const string BulkUpload = "Permissions.Staff.BulkUpload";
-            public const string Edit = "Permissions.Staff.Edit";
-            public const string Delete = "Permissions.Staff.Delete";
-            public const string Export = "Permissions.Staff.Export";
-            public const string Search = "Permissions.Staff.Search";
-            public const string Profile = "Permissions.Staff.Profile";
-            public const string Enable = "Permissions.Staff.Enable";
-            public const string EnrollUser = "Permissions.Staff.EnrollUser";
-            public const string SpectraScanFinger = "Permissions.Staff.SpectraScanFinger";
-            public const string SpectraPushFinger = "Permissions.Staff.SpectraPushFinger";
-        }
-        [DisplayName("Student")]
-        [Description("Student Permissions")]
-        public static class Student
-        {
-            public const string View = "Permissions.Student.View";
-            public const string Create = "Permissions.Student.Create";
-            public const string BulkUpload = "Permissions.Student.BulkUpload";
-            public const string Edit = "Permissions.Student.Edit";
-            public const string Delete = "Permissions.Student.Delete";
-            public const string Export = "Permissions.Student.Export";
-            public const string Search = "Permissions.Student.Search";
-            public const string Profile = "Permissions.Staff.Profile";
-            public const string Enable = "Permissions.Staff.Enable";
-            public const string EnrollUser = "Permissions.Staff.EnrollUser";
-            public const string SpectraScanFinger = "Permissions.Staff.SpectraScanFinger";
-            public const string SpectraPushFinger = "Permissions.Staff.SpectraPushFinger";
-        }
-        [DisplayName("UserGroup")]
-        [Description("UserGroup Permissions")]
-        public static class UserGroup
-        {
-            public const string View = "Permissions.UserGroup.View";
-            public const string Create = "Permissions.UserGroup.Create";
-            public const string BulkUpload = "Permissions.UserGroup.BulkUpload";
-            public const string Edit = "Permissions.UserGroup.Edit";
-            public const string Delete = "Permissions.UserGroup.Delete";
-            public const string Export = "Permissions.UserGroup.Export";
-            public const string Search = "Permissions.UserGroup.Search";
-            public const string MapStaffs = "Permissions.UserGroup.MapStaffs";
-            public const string MapStudents = "Permissions.UserGroup.MapStudents";
-            public const string MapDevices = "Permissions.UserGroup.MapDevices";
+            public const string View = "Permissions.ProductCategory.View";
+            public const string Create = "Permissions.ProductCategory.Create";
+            public const string Edit = "Permissions.ProductCategory.Edit";
+            public const string Delete = "Permissions.ProductCategory.Delete";
+            public const string Export = "Permissions.ProductCategory.Export";
+            public const string Search = "Permissions.ProductCategory.Search";
+            public const string Import = "Permissions.Sales.Import";
         }
 
-        [DisplayName("AccessDevice")]
-        [Description("AccessDevice Permissions")]
-        public static class AccessDevice
+        [DisplayName("Sales")]
+        [Description("Sales Permissions")]
+        public static class Sales
         {
-            public const string View = "Permissions.AccessDevice.View";
-            public const string Create = "Permissions.AccessDevice.Create";
-            public const string Edit = "Permissions.AccessDevice.Edit";
-            public const string Delete = "Permissions.AccessDevice.Delete";
-            public const string Export = "Permissions.AccessDevice.Export";
-            public const string Search = "Permissions.AccessDevice.Search";
-            public const string MasterDownload = "Permissions.AccessDevice.MasterDownload";
-            public const string MasterPush = "Permissions.AccessDevice.MasterPush";
-            public const string DevicePush = "Permissions.AccessDevice.DevicePush";
-            public const string ControllerSetup = "Permissions.AccessDevice.ControllerSetup";
-            public const string FactoryReset = "Permissions.AccessDevice.FactoryReset";
-            public const string CourseSync = "Permissions.AccessDevice.CourseSync";
-            public const string PushDataToSpectraDevice = "Permissions.AccessDevice.PushDataToSpectraDevice";
-        }
-
-        [DisplayName("Locations")]
-        [Description("Locations Permissions")]
-        public static class Location
-        {
-            public const string View = "Permissions.Location.View";
-            public const string Create = "Permissions.Location.Create";
-            public const string Edit = "Permissions.Location.Edit";
-            public const string Delete = "Permissions.Location.Delete";
-            public const string Export = "Permissions.Location.Export";
-            public const string Search = "Permissions.Location.Search";
-            public const string Import = "Permissions.Location.Import";
-            public const string MasterPush = "Permissions.Location.MasterPush";
+            public const string View = "Permissions.Sales.View";
+            public const string Create = "Permissions.Sales.Create";
+            public const string Edit = "Permissions.Sales.Edit";
+            public const string Delete = "Permissions.Sales.Delete";
+            public const string Export = "Permissions.Sales.Export";
+            public const string Search = "Permissions.Sales.Search";
+            public const string Import = "Permissions.Sales.Import";
         }
 
         [DisplayName("Users")]

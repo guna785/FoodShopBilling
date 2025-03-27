@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FoodShopBilling.Application.Interfaces.Services;
 using FoodShopBilling.Domain.Contracts;
+using FoodShopBilling.Domain.Entities;
 
 namespace FoodShopBilling.Infrastructure.Contexts
 {
@@ -63,32 +64,32 @@ namespace FoodShopBilling.Infrastructure.Contexts
           
             _ = builder.Entity<ApplicationUser>(entity =>
             {
-                _ = entity.ToTable(name: "Users", "Identity");
+                _ = entity.ToTable(name: "Users");
                 _ = entity.Property(e => e.Id).ValueGeneratedOnAdd();
             });
 
             _ = builder.Entity<ApplicationRole>(entity =>
             {
-                _ = entity.ToTable(name: "Roles", "Identity");
+                _ = entity.ToTable(name: "Roles");
             });
             _ = builder.Entity<IdentityUserRole<int>>(entity =>
             {
-                _ = entity.ToTable("UserRoles", "Identity");
+                _ = entity.ToTable("UserRoles");
             });
 
             _ = builder.Entity<IdentityUserClaim<int>>(entity =>
             {
-                _ = entity.ToTable("UserClaims", "Identity");
+                _ = entity.ToTable("UserClaims");
             });
 
             _ = builder.Entity<IdentityUserLogin<int>>(entity =>
             {
-                _ = entity.ToTable("UserLogins", "Identity");
+                _ = entity.ToTable("UserLogins");
             });
 
             _ = builder.Entity<ApplicationRoleClaim>(entity =>
             {
-                _ = entity.ToTable(name: "RoleClaims", "Identity");
+                _ = entity.ToTable(name: "RoleClaims");
 
                 _ = entity.HasOne(d => d.Role)
                     .WithMany(p => p.RoleClaims)
@@ -98,9 +99,21 @@ namespace FoodShopBilling.Infrastructure.Contexts
 
             _ = builder.Entity<IdentityUserToken<int>>(entity =>
             {
-                _ = entity.ToTable("UserTokens", "Identity");
+                _ = entity.ToTable("UserTokens");
             });
-          
+            _ = builder.Entity<ProductCategory>(entity =>
+            {
+                _ = entity.ToTable("ProductCategory");
+            });
+            _ = builder.Entity<Products>(entity =>
+            {
+                _ = entity.ToTable("Products");
+            });
+            _ = builder.Entity<Sales>(entity =>
+            {
+                _ = entity.ToTable("Sales");
+            });
+
         }
     }
 }

@@ -9,12 +9,13 @@ namespace FoodShopBilling.Application.Interfaces.Services.Identity
 {
     public interface IUserService : IService
     {
-        Task<DataTablesJsonResult> GetPaginatedAsync(IDataTablesRequest request);
         Task<Result<List<UserResponse>>> GetAllAsync();
         Task<Result<int>> DeleteUser(int userId);
         Task<int> GetCountAsync();
 
         Task<IResult<UserResponse>> GetAsync(string userId);
+        Task<IResult<UserResponse>> GetByNameAsync(string userName);
+        Task<IResult<string>> ReleaseDevice(string userId);
 
         Task<IResult> RegisterAsync(RegisterRequest request, string origin);
 

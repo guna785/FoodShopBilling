@@ -28,16 +28,14 @@ namespace FoodShopBilling.Application.Features.ProductCategories.Queries.GetAll
         private readonly IUnitOfWork<int> _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<GetAllProductCategoryQueryHandler> _logger;
-        private readonly IValidator<GetAllProductCategoryQuery> _addEditProductCategoryCommandValidator;
         private readonly IAppCache _cache;
-        public GetAllProductCategoryQueryHandler(IStringLocalizer<GetAllProductCategoryQueryHandler> localize,IAppCache cache, IUnitOfWork<int> unitOfWork, IMapper mapper, ILogger<GetAllProductCategoryQueryHandler> logger, IValidator<GetAllProductCategoryQuery> addEditProductCategoryCommandValidator)
+        public GetAllProductCategoryQueryHandler(IStringLocalizer<GetAllProductCategoryQueryHandler> localize,IAppCache cache, IUnitOfWork<int> unitOfWork, IMapper mapper, ILogger<GetAllProductCategoryQueryHandler> logger)
         {
             _localize = localize;
             _cache = cache;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
-            _addEditProductCategoryCommandValidator = addEditProductCategoryCommandValidator;
         }
         public async Task<Result<List<ProductCategoryResponse>>> Handle(GetAllProductCategoryQuery request, CancellationToken cancellationToken)
         {

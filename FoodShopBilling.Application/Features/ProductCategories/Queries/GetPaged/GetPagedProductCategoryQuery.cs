@@ -45,16 +45,14 @@ namespace FoodShopBilling.Application.Features.ProductCategories.Queries.GetPage
         private readonly IUnitOfWork<int> _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<GetPagedProductCategoryQueryHandler> _logger;
-        private readonly IValidator<GetPagedProductCategoryQuery> _addEditProductCategoryCommandValidator;
         private readonly IAppCache _cache;
-        public GetPagedProductCategoryQueryHandler(IStringLocalizer<GetPagedProductCategoryQueryHandler> localize, IAppCache cache, IUnitOfWork<int> unitOfWork, IMapper mapper, ILogger<GetPagedProductCategoryQueryHandler> logger, IValidator<GetPagedProductCategoryQuery> addEditProductCategoryCommandValidator)
+        public GetPagedProductCategoryQueryHandler(IStringLocalizer<GetPagedProductCategoryQueryHandler> localize, IAppCache cache, IUnitOfWork<int> unitOfWork, IMapper mapper, ILogger<GetPagedProductCategoryQueryHandler> logger)
         {
             _localize = localize;
             _cache = cache;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
-            _addEditProductCategoryCommandValidator = addEditProductCategoryCommandValidator;
         }
         public async Task<PaginatedResult<ProductCategoryResponse>> Handle(GetPagedProductCategoryQuery request, CancellationToken cancellationToken)
         {

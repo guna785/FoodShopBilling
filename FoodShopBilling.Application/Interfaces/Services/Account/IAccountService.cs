@@ -6,12 +6,13 @@ namespace FoodShopBilling.Application.Interfaces.Services.Account
 {
     public interface IAccountService : IService
     {
-        Task<IResult> UpdateProfileAsync(UpdateProfileRequest model);
-        Task<IResult> UpdatePasswordAsync(UpdatePasswordRequest model);
-        Task<IResult> ChangePasswordAsync(ChangePasswordRequest model);
+        Task<IResult> UpdateProfileAsync(UpdateProfileRequest model, int userId);
+
+        Task<IResult> UpdatePasswordAsync(UpdatePasswordRequest model, int userId);
+        Task<IResult> ChangePasswordAsync(ChangePasswordRequest model, int userId);
 
         Task<IResult<string>> GetProfilePictureAsync(int userId);
 
-        Task<IResult<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request);
+        Task<IResult<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, int userId);
     }
 }

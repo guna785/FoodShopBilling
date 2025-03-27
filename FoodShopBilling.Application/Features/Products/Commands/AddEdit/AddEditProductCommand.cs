@@ -24,7 +24,7 @@ namespace FoodShopBilling.Application.Features.Products.Commands.AddEdit
         public string ImageUrl { get; set; }
         public decimal Price { get; set; }
         public decimal Tax { get; set; }
-        public int ProductsId { get; set; }
+        public int ProductCategoryId { get; set; }
     }
     internal class AddEditProductCommandHandler : IRequestHandler<AddEditProductCommand, Result<int>>
     {
@@ -76,6 +76,9 @@ namespace FoodShopBilling.Application.Features.Products.Commands.AddEdit
                         {
                             dept.Name = request.Name;
                             dept.Description = request.Description;
+                            dept.Price = request.Price;
+                            dept.ProductCategoryId = request.ProductCategoryId;
+                            dept.Tax = request.Tax;
                             _logger.LogInformation("Updating Products Data...");
                             await _unitOfWork.Repository<Domain.Entities.Products>().UpdateAsync(dept!).ConfigureAwait(false);
                             await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllProductsCacheKey).ConfigureAwait(false);
