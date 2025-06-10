@@ -39,6 +39,7 @@ dependencies:
   flutter_svg:
   fl_chart:
   provider:
+  paged_datatable:
 
 dev_dependencies:
   flutter_test:
