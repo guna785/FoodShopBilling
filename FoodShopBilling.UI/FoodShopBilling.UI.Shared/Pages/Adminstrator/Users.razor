@@ -1,0 +1,286 @@
+﻿@page "/administrator/users"
+@using FoodShopBilling.UI.Shared.Managers.Identity.Users
+@using FoodShopBilling.Utilities.Responses.Identity
+@using FoodShopBilling.Utilities.Requests.Identity
+@using FoodShopBilling.Utilities.Requests
+<FluentStack Style="padding:15px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Stretch">
+    <FluentGrid>
+        <FluentGridItem md="12">
+            <FluentBreadcrumb>
+                <FluentBreadcrumbItem Href="/">
+                    Home
+                    <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.Home())" Color="@Color.Neutral" Slot="start" />
+                </FluentBreadcrumbItem>
+                <FluentBreadcrumbItem Href="#">
+                    Users
+                    <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.People())" Color="@Color.Neutral" Slot="start" />
+                </FluentBreadcrumbItem>
+            </FluentBreadcrumb>
+        </FluentGridItem>
+        <FluentGridItem md="12">
+            <FluentCard>
+                <FluentStack Style="padding:10px;" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Stretch" Orientation="Orientation.Vertical">
+                    <FluentStack Style="padding:20px;" Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Start" VerticalAlignment="VerticalAlignment.Center">
+                        <FluentButton OnClick="@(()=>AddEditUser())" Appearance="Appearance.Accent" IconStart="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.AddCircle())">Add</FluentButton>
+                    </FluentStack>
+                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment=" VerticalAlignment.Center">
+                        <div style="max-height: 600px; min-height:150px; overflow-x:auto; display:flex;" tabindex="-1">
+                            <FluentDataGrid @ref="dataGrid"
+                                            Items="users"
+                                            RefreshItems="RefreshItemsAsync"
+                                            OnRowDoubleClick="@(()=>Console.WriteLine("Row double clicked!"))"
+                                            RowSize="DataGridRowSize.Medium"
+                                            GenerateHeader="GenerateHeaderOption.Sticky"
+                                            TGridItem="UserResponse"
+                                            Loading="loading"
+                                            Pagination="pagination">
+                                <PropertyColumn Title="User Name" Property="@(c => c!.UserName)" Sortable="true">
+                                    <ColumnOptions>
+                                        <div class="search-box">
+                                            <FluentSearch type="search" Autofocus=true @bind-Value=userNameFilter @oninput="HandleUserNameFilter" @bind-Value:after="HandleUserNameClear" Placeholder="User Name..." />
+                                        </div>
+                                    </ColumnOptions>
+                                </PropertyColumn>
+                                <PropertyColumn Property="@(c => c!.Name)" Sortable="true">
+                                    <ColumnOptions>
+                                        <div class="search-box">
+                                            <FluentSearch type="search" Autofocus=true @bind-Value=nameFilter @oninput="HandleNameFilter" @bind-Value:after="HandleNameClear" Placeholder="Name..." />
+                                        </div>
+                                    </ColumnOptions>
+                                </PropertyColumn>
+                               
+                                <PropertyColumn Property="@(c => c!.Email)" Sortable="true">
+                                    <ColumnOptions>
+                                        <div class="search-box">
+                                            <FluentSearch type="search" Autofocus=true @bind-Value=emailFilter @oninput="HandleEmailFilter" @bind-Value:after="HandleEmailClear" Placeholder="Email..." />
+                                        </div>
+                                    </ColumnOptions>
+                                </PropertyColumn>
+                                <PropertyColumn Title="Phone No" Property="@(c => c!.PhoneNumber)" Sortable="true">
+                                    <ColumnOptions>
+                                        <div class="search-box">
+                                            <FluentSearch type="search" Autofocus=true @bind-Value=phoneFilter @oninput="HandlePhoneFilter" @bind-Value:after="HandlePhoneClear" Placeholder="Phone..." />
+                                        </div>
+                                    </ColumnOptions>
+                                </PropertyColumn>
+                                <TemplateColumn Title="Actions" Align="@Align.End" Sortable="false">
+                                    <FluentButton Title="View Profile" aria-label="View Profile" IconEnd="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.Person())" OnClick="@(()=>ViewProfile(context))" />
+                                    <FluentButton Title="Update User Roles" aria-label="Update User Roles" IconEnd="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.PersonPasskey())" OnClick="@(()=>UpdateUserRole(context))" />
+                                    <FluentButton Title="Delete User" aria-label="Delete User" IconEnd="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.Delete())" OnClick="@(() => DeleteUser(context))" />
+                                </TemplateColumn>
+                            </FluentDataGrid>
+                        </div>
+                        <FluentPaginator State="@pagination" />
+                    </FluentStack>
+
+                </FluentStack>
+
+            </FluentCard>
+        </FluentGridItem>
+    </FluentGrid>
+
+</FluentStack>
+
+@code {
+    [Inject] private IUserManager manager { get; set; } = default!;
+    FluentDataGrid<UserResponse> dataGrid = default!;
+    IQueryable<UserResponse> users = default!;
+    Dictionary<string, string> searchValues = new();
+    string userNameFilter = string.Empty, nameFilter = string.Empty, emailFilter = string.Empty, phoneFilter = string.Empty;
+    bool loading = true;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+
+    private async Task ViewProfile(UserResponse user)
+    {
+        _navigationManager.NavigateTo($"/user/profile/{user.Id}", false);
+    }
+
+    protected async Task RefreshItemsAsync(GridItemsProviderRequest<UserResponse> req)
+    {
+        loading = true;
+        await InvokeAsync(StateHasChanged);
+        var searchString = searchValues.Count > 0 ? string.Join(",", searchValues.Select(x => $"{x.Key}:{x.Value}").ToList()) : string.Empty;
+
+        UserPaginatedRequest request = new()
+            {
+                PageSize = req.Count ?? 10,
+                SearchString = searchString,
+                PageNumber = req.StartIndex
+            };
+
+
+        var s = req.GetSortByProperties().FirstOrDefault();
+        if (req.SortByColumn != null && !string.IsNullOrEmpty(s.PropertyName))
+        {
+            request.Orderby = new string[] { s.PropertyName + (s.Direction == SortDirection.Ascending ? " ASC" : " DESC") };
+        }
+
+        var response = await manager.GetPagedAsync(request);
+
+        users = response!.Data.AsQueryable();
+        await pagination.SetTotalItemCountAsync(response!.TotalCount);
+
+        loading = false;
+        await InvokeAsync(StateHasChanged);
+
+    }
+
+
+
+    public async Task DataGridRefreshDataAsync()
+    {
+        await dataGrid.RefreshDataAsync(true);
+    }
+    private async Task HandleUserNameFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            userNameFilter = value;
+            searchValues[nameof(RegisterRequest.UserName)] = value;
+            await dataGrid.RefreshDataAsync(true);
+        }
+    }
+
+    private async Task HandleNameFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            nameFilter = value;
+            searchValues[nameof(RegisterRequest.Name)] = value;
+            await dataGrid.RefreshDataAsync(true);
+        }
+    }
+    private async Task HandleEmailFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            emailFilter = value;
+            searchValues[nameof(RegisterRequest.Email)] = value;
+            await dataGrid.RefreshDataAsync(true);
+        }
+    }
+    private async Task HandlePhoneFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            phoneFilter = value;
+            searchValues[nameof(RegisterRequest.PhoneNumber)] = value;
+            await dataGrid.RefreshDataAsync(true);
+        }
+    }
+
+    private async Task HandleUserNameClear()
+    {
+        if (string.IsNullOrWhiteSpace(userNameFilter))
+        {
+            userNameFilter = string.Empty;
+            if (searchValues.Any(x => x.Key == nameof(RegisterRequest.UserName)))
+            {
+                searchValues.Remove(nameof(RegisterRequest.UserName)!);
+                await dataGrid.RefreshDataAsync(true);
+            }
+        }
+    }
+
+    private async Task HandleNameClear()
+    {
+        if (string.IsNullOrWhiteSpace(nameFilter))
+        {
+            nameFilter = string.Empty;
+            if (searchValues.Any(x => x.Key == nameof(RegisterRequest.Name)))
+            {
+                searchValues.Remove(nameof(RegisterRequest.Name)!);
+                await dataGrid.RefreshDataAsync(true);
+            }
+        }
+    }
+
+    private async Task HandleEmailClear()
+    {
+        if (string.IsNullOrWhiteSpace(emailFilter))
+        {
+            emailFilter = string.Empty;
+            if (searchValues.Any(x => x.Key == nameof(RegisterRequest.Email)))
+            {
+                searchValues.Remove(nameof(RegisterRequest.Email)!);
+                await dataGrid.RefreshDataAsync(true);
+            }
+        }
+    }
+
+    private async Task HandlePhoneClear()
+    {
+        if (string.IsNullOrWhiteSpace(phoneFilter))
+        {
+            phoneFilter = string.Empty;
+            if (searchValues.Any(x => x.Key == nameof(RegisterRequest.PhoneNumber)))
+            {
+                searchValues.Remove(nameof(RegisterRequest.PhoneNumber)!);
+                await dataGrid.RefreshDataAsync(true);
+            }
+        }
+    }
+
+    private async Task UpdateUserRole(UserResponse user)
+    {
+        var parameters = new DialogParameters
+            {
+                Title = "Update User Roles",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true,
+                Id = user.Id.ToString()
+            };
+
+        var dialog = await _dialogService.ShowDialogAsync<UpdateUserRoles>((new UpdateUserRolesRequest()), parameters);
+        var dialogResult = await dialog.Result;
+    }
+    private async Task AddEditUser()
+    {
+        var parameters = new DialogParameters
+            {
+                Title = "Add User",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true
+            };
+
+        var dialog = await _dialogService.ShowDialogAsync<AddUserDialog>((new RegisterRequest()), parameters);
+        var dialogResult = await dialog.Result;
+        await dataGrid.RefreshDataAsync(true);
+    }
+    private async Task DeleteUser(UserResponse data)
+    {
+        if (data.UserName.ToLower().Equals("admin"))
+        {
+            _ = await _dialogService.ShowWarningAsync("Admin User can't be deleted!..", null, "Close");
+        }
+        else
+        {
+            var dialog = await _dialogService.ShowMessageBoxAsync(new DialogParameters<MessageBoxContent>()
+                {
+                    Content = new()
+                    {
+                        Title = "Delete User",
+                        MarkupMessage = new MarkupString($"Are  you sure want to delete <strong> {data.UserName} </strong> this item"),
+                        Icon = new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.Delete(),
+                        IconColor = Color.Warning,
+                    },
+                    PrimaryAction = "Yes",
+                    SecondaryAction = "Cancel",
+                    Width = "300px",
+                });
+            var result = await dialog.Result;
+            if (!result.Cancelled)
+            {
+                var res = await manager.DeleteUser(data.Id.ToString());
+                if (res.Succeeded)
+                {
+                    ToastService.ShowSuccess(res!.Messages[0], 7000);
+                }
+                else
+                {
+                    ToastService.ShowError(res!.Messages[0], 7000);
+                }
+            }
+        }
+    }
+}

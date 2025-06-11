@@ -1,30 +1,45 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">FoodShopBilling.UI</a>
-    </div>
-</div>
+﻿<FluentNavMenu Style="height:100%;" Width="250" @bind-Expanded="@IsNavVisible" Title="Custom navigation menu">
+    <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Home())" Href="/" Match="NavLinkMatch.All">Home</FluentNavLink>
+    <FluentNavGroup Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Settings())" Title="Master">
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.CatchUp())" Href="/master/producttypes">Product Type</FluentNavLink>
+	    	<FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.CatchUp())" Href="/master/productcategories">Product Category</FluentNavLink>
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.BuildingFactory())" Href="/master/vendors">Vendors</FluentNavLink>
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.CatchUp())" Href="/master/transactiontypes">Transaction Type</FluentNavLink>
+    </FluentNavGroup>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+    <FluentNavGroup Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Organization())" Title="Organisation">
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.People())" Href="/master/company">Company</FluentNavLink>
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Accessibility())" Href="/master/branch">Branch</FluentNavLink>
+    </FluentNavGroup>
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
+    <FluentNavGroup Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Group())"
+                    Title="Scheme">
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Trophy())"
+                       Href="/master/scheme">Scheme</FluentNavLink>
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Gift())"
+                       Href="/master/schemebonustypes">Scheme Bonus Type</FluentNavLink>
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Bookmark())"
+                       Href="/master/schemetypes">Scheme Type</FluentNavLink>
+    </FluentNavGroup>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
+    <FluentNavGroup Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.BuildingPeople())" Title="Customers">
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.People())" Href="/customers/customer">Customer</FluentNavLink>
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Group())" Href="/customers/customergroups">CustomerGroups</FluentNavLink>
+    </FluentNavGroup>
+    <FluentNavGroup Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.BuildingPeople())" Title="Purchase">
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.People())" Href="/purchase/purchases">Purchase</FluentNavLink>
+    </FluentNavGroup>
+    <FluentNavGroup Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.BuildingPeople())" Title="Stocks">
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.People())" Href="/products/stocks">Stock</FluentNavLink>
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.GiftOpen())" Href="/products/stock-transactions">StockTransaction</FluentNavLink>
+    </FluentNavGroup>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
+    <FluentNavGroup Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.PeopleSettings())" Title="Administrator">
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.People())" Href="/administrator/users">Users</FluentNavLink>
+        <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Accessibility())" Href="/administrator/roles">Roles</FluentNavLink>
+    </FluentNavGroup>
+    <FluentNavLink Icon="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.EyeTracking())" Href="/audit/logs">Audit Trails</FluentNavLink>
+</FluentNavMenu>
+@code {
+    [Parameter] public bool IsNavVisible { get; set; }
+}

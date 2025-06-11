@@ -9,12 +9,30 @@
     <link rel="stylesheet" href="_content/FoodShopBilling.UI.Shared/app.css" />
     <link rel="stylesheet" href="FoodShopBilling.UI.Web.styles.css" />
     <link rel="icon" type="image/png" href="_content/FoodShopBilling.UI.Shared/favicon.png" />
+    
+    <link href="_content/Microsoft.FluentUI.AspNetCore.Components/css/reboot.css" rel="stylesheet" />
     <HeadOutlet @rendermode="InteractiveServer" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            font-family: var(--body-font);
+            font-size: var(--type-ramp-base-font-size);
+            line-height: var(--type-ramp-base-line-height);
+            font-weight: var(--font-weight);
+            color: var(--neutral-foreground-rest);
+            background: var(--neutral-fill-layer-rest);
+        }
+    </style>
 </head>
 
 <body>
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
+    <script src="_content/Microsoft.FluentUI.AspNetCore.Components/Microsoft.FluentUI.AspNetCore.Components.lib.module.js" type="module" async></script>
+    <script src="_content/Microsoft.FluentUI.AspNetCore.Components/js/loading-theme.js" type="text/javascript"></script>
+    <loading-theme storage-name="theme"></loading-theme>
 </body>
 
 </html>

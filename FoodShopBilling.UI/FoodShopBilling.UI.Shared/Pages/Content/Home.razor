@@ -1,0 +1,69 @@
+﻿@page "/"
+
+<FluentStack Style="padding:15px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Stretch">
+    <FluentGrid>
+        <FluentGridItem md="12">
+            <FluentStack Style="padding:10px;" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Stretch" Orientation="Orientation.Vertical">
+                <FluentToolbar Orientation="Orientation.Horizontal">
+                    <FluentButton Style="height:100px;">
+                        <FluentStack Style="padding:10px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                            <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.DataBarVerticalAdd())" />
+                            <FluentLabel>New Sales</FluentLabel>
+                        </FluentStack>
+                    </FluentButton>
+                    <FluentButton Style="height:100px;">
+                        <FluentStack Style="padding:10px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                            <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.DataBarVerticalAdd())" />
+                            <FluentLabel>New Schemes</FluentLabel>
+                        </FluentStack>
+                    </FluentButton>
+                    <FluentButton Style="height:100px;">
+                        <FluentStack Style="padding:10px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                            <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.DataBarVerticalAdd())" />
+                            <FluentLabel>Stock Transactions</FluentLabel>
+                        </FluentStack>
+                    </FluentButton>
+                   
+                    <FluentButton Style="height:100px;">
+                        <FluentStack Style="padding:10px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                            <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.DataBarVerticalAdd())" />
+                            <FluentLabel>New Purchase</FluentLabel>
+                        </FluentStack>
+                    </FluentButton>
+                </FluentToolbar>
+            </FluentStack>
+        </FluentGridItem>
+        <FluentGridItem md="12">
+            <FluentBreadcrumb>
+                <FluentBreadcrumbItem Href="/">
+                    Home
+                    <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.Home())" Color="@Color.Neutral" Slot="start" />
+                </FluentBreadcrumbItem>
+            </FluentBreadcrumb>
+        </FluentGridItem>
+        <FluentGridItem md="12">
+        </FluentGridItem>
+    </FluentGrid>
+
+</FluentStack>
+@code {
+    private static Icon ResourcesIcon(bool active = false) =>
+    active ? new Microsoft.FluentUI.AspNetCore.Components.Icons.Filled.Size32.AppFolder()
+           : new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size32.AppFolder();
+
+    private static Icon ConsoleLogsIcon(bool active = false) =>
+        active ? new Microsoft.FluentUI.AspNetCore.Components.Icons.Filled.Size32.AppGeneric()
+               : new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size32.AppGeneric();
+
+    private static Icon StructuredLogsIcon(bool active = false) =>
+        active ? new Microsoft.FluentUI.AspNetCore.Components.Icons.Filled.Size32.SlideTextSparkle()
+               : new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size32.SlideTextSparkle();
+
+
+    private void HandlePopover(bool visible) => Console.WriteLine($"Popover visibility changed to {visible}");
+
+    private void HandleOrientationChanged()
+    {
+
+    }
+}

@@ -1,0 +1,363 @@
+﻿@page "/user/profile/{Id}"
+@using FoodShopBilling.Application.Extensions
+@using FoodShopBilling.Domain.Enums
+@using FoodShopBilling.Shared.Constants.Role
+@using FoodShopBilling.UI.Shared.Extensions
+@using FoodShopBilling.Utilities.Enums
+@using FoodShopBilling.Utilities.Requests.Identity
+@using FoodShopBilling.Utilities.Responses.Identity
+<FluentStack Style="padding:15px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Stretch">
+    <FluentGrid>
+        <FluentGridItem md="12">
+            <FluentBreadcrumb>
+                <FluentBreadcrumbItem Href="/">
+                    Home
+                    <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.Home())" Color="@Color.Neutral" Slot="start" />
+                </FluentBreadcrumbItem>
+                <FluentBreadcrumbItem Href="#">
+                    Account
+                    <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.PersonSettings())" Color="@Color.Neutral" Slot="start" />
+                </FluentBreadcrumbItem>
+            </FluentBreadcrumb>
+        </FluentGridItem>
+        @if (_loaded)
+        {
+            <FluentGridItem md="12">
+
+                <FluentGrid>
+                    <FluentGridItem md="12">
+                        <div>
+                            <h4>@Title</h4>
+                        </div>
+                    </FluentGridItem>
+                    <AuthorizeView Roles="@RoleConstants.AdministratorRole.ToUpper()">
+                        @if (CurrentUserId != Id)
+                        {
+                            <FluentGridItem md="12">
+                                <FluentCard>
+                                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Start" VerticalAlignment="VerticalAlignment.Center">
+                                        <h5>Administrator Settings.</h5>
+                                        <h6>This is an Administrator Only View.</h6>
+                                    </FluentStack>
+                                    <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Start" VerticalAlignment="VerticalAlignment.Center">
+                                        <FluentCheckbox @bind-Value="@_active">Active?</FluentCheckbox>
+                                        <FluentButton Appearance="Appearance.Accent" IconStart="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Save())" OnClick="ToggleUserStatus" Type="ButtonType.Button">Save Changes</FluentButton>
+                                    </FluentStack>
+                                </FluentCard>
+                            </FluentGridItem>
+                        }
+                    </AuthorizeView>
+
+
+                    <FluentGridItem md="4">
+                        <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                            <FluentPersona Status="PresenceStatus.Available"
+                                           StatusSize="PresenceBadgeSize.Large"
+                                           Image="@ImageDataUrl"
+                                           ImageSize="250px">
+                            </FluentPersona>
+                            <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                                <FluentInputFile @ref="@myFileUploader"
+                                                 DragDropZoneVisible="false"
+                                                 Mode="InputFileMode.SaveToTemporaryFolder"
+                                                 Multiple="false"
+                                                 AnchorId="ProfileUpload"
+                                                 MaximumFileSize="@(100 * 1024 * 1024)"
+                                                 Accept=".jpg, .png, .jpeg"
+                                                 OnCompleted="@OnCompleted" />
+                                <FluentProgress Min="0" Max="100" Visible="@(progressPercent > 0)" Value="@progressPercent" />
+                                <FluentLabel Alignment="HorizontalAlignment.Center">
+                                    @progressTitle
+                                </FluentLabel>
+                                <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                                    <FluentButton><FluentIcon Color="@Color.Error" Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Delete())" />Delete </FluentButton>
+                                    <FluentButton Id="ProfileUpload"><FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.CloudArrowUp())" /> Upload</FluentButton>
+                                </FluentStack>
+                            </FluentStack>
+                            <FluentLabel Typo="Typography.PaneHeader">  @user.UserName </FluentLabel>
+                            <FluentLabel Typo="Typography.Header"> <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Mail())" /> @user.Email </FluentLabel>
+                        </FluentStack>
+
+                    </FluentGridItem>
+                    <FluentGridItem md="8">
+                        <FluentTabs>
+                            <FluentTab Id="Profile">
+                                <Header>
+                                    <FluentLabel Typo="Typography.PaneHeader"> <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size28.PersonBoard())" /> Profile</FluentLabel>
+                                </Header>
+                                <Content>
+                                    <FluentGrid>
+                                        <FluentGridItem md="12">
+                                            <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                                                <EditForm Model="@_profileModel" OnValidSubmit="@UpdateProfileAsync" FormName="ProfileUpdate" novalidate>
+                                                    <FluentGrid>
+                                                        <FluentGridItem md="12">
+                                                            <div style="width:80%;text-align:center;padding:20px;">
+                                                                <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                                                                    <FluentTextField Label="Name *" @bind-Value="@_profileModel.Name" />
+                                                                    <FluentTextField Label="Email Id *" @bind-Value="@_profileModel.Email" />
+                                                                    <FluentTextField Label="Phone No" @bind-Value="@_profileModel.PhoneNumber" />
+                                                                  
+                                                                </FluentStack>
+
+                                                            </div>
+                                                        </FluentGridItem>
+                                                        <FluentGridItem md="12">
+                                                            <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" IconStart="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Save())">Save</FluentButton>
+                                                        </FluentGridItem>
+                                                    </FluentGrid>
+                                                </EditForm>
+                                            </FluentStack>
+                                        </FluentGridItem>
+                                    </FluentGrid>
+                                </Content>
+                            </FluentTab>
+                            <FluentTab Id="Security">
+                                <Header>
+                                    <FluentLabel Typo="Typography.PaneHeader"><FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size28.ApprovalsApp())" Color="@Color.Success" /> Security</FluentLabel>
+                                </Header>
+                                <Content>
+                                    <FluentGrid>
+                                        <FluentGridItem md="12">
+                                            <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                                                @if (CurrentUserId == Id)
+                                                {
+                                                    <EditForm Model="@_changeModel" OnValidSubmit="@ChangePasswordAsync" FormName="SecurityUpdate" novalidate>
+                                                        <FluentGrid>
+                                                            <FluentGridItem md="12">
+                                                                <div style="width:80%;text-align:center;padding:20px;">
+                                                                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                                                                        <FluentTextField TextFieldType="TextFieldType.Password" Label="Old Password *" @bind-Value="@_changeModel.OldPassword" />
+                                                                        <FluentTextField TextFieldType="TextFieldType.Password" Label="New Password *" @bind-Value="@_changeModel.NewPassword" />
+                                                                        <FluentTextField TextFieldType="TextFieldType.Password" Label="Confirm New Password" @bind-Value="@_changeModel.ConfirmNewPassword" />
+                                                                    </FluentStack>
+                                                                </div>
+                                                            </FluentGridItem>
+                                                            <FluentGridItem md="12">
+                                                                <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" IconStart="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Save())">Save</FluentButton>
+                                                            </FluentGridItem>
+                                                        </FluentGrid>
+                                                    </EditForm>
+
+                                                }
+                                                else
+                                                {
+                                                    <EditForm Model="@_passwordModel" OnValidSubmit="@UpdateProfileAsync" FormName="SecurityUpdate" novalidate>
+                                                        <FluentGrid>
+                                                            <FluentGridItem md="12">
+                                                                <div style="width:80%;text-align:center;padding:20px;">
+                                                                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                                                                        <FluentTextField TextFieldType="TextFieldType.Password" Label="New Password *" @bind-Value="@_passwordModel.NewPassword" />
+                                                                        <FluentTextField TextFieldType="TextFieldType.Password" Label="Confirm New Password" @bind-Value="@_passwordModel.ConfirmNewPassword" />
+                                                                    </FluentStack>
+
+                                                                </div>
+                                                            </FluentGridItem>
+                                                            <FluentGridItem md="12">
+                                                                <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" IconStart="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Save())">Save</FluentButton>
+                                                            </FluentGridItem>
+                                                        </FluentGrid>
+                                                    </EditForm>
+                                                }
+                                            </FluentStack>
+                                        </FluentGridItem>
+                                    </FluentGrid>
+                                </Content>
+                            </FluentTab>
+                        </FluentTabs>
+                    </FluentGridItem>
+                </FluentGrid>
+            </FluentGridItem>
+        }
+        else
+        {
+            <FluentGridItem md="12">
+                <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                    <FluentProgressRing style="width: 102px; height: 102px;"></FluentProgressRing>
+                </FluentStack>
+            </FluentGridItem>
+        }
+    </FluentGrid>
+</FluentStack>
+@code {
+
+    private bool _active;
+    private char _firstLetterOfName;
+    private string Title = string.Empty;
+    private bool _loaded;
+    private UserResponse user = new();
+    private UpdatePasswordRequest _passwordModel = new();
+    private ChangePasswordRequest _changeModel = new();
+    bool isAdminRole = false;
+    bool _formUploading;
+    FluentInputFile? myFileUploader = default!;
+    int? progressPercent;
+    string? progressTitle;
+    private int CurrentUserId = 0;
+    FluentInputFileEventArgs[] Files = Array.Empty<FluentInputFileEventArgs>();
+
+    async Task OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        Files = files.ToArray();
+        progressPercent = myFileUploader!.ProgressPercent;
+        progressTitle = myFileUploader!.ProgressTitle;
+
+        foreach (var file in Files)
+        {
+            var data = File.ReadAllBytes(file.LocalFile.FullName);
+            var base64 = Convert.ToBase64String(data);
+            var format = "image/png";
+            ImageDataUrl = $"data:{format};base64,{base64}";
+            var request = new UpdateProfilePictureRequest { Id = Id, Data = data, FileName = file.Name, Extension = Path.GetExtension(file.Name), UploadType = UploadType.ProfilePicture };
+            var result = await _accountManager.UpdateProfilePictureAsync(request, Id.ToString());
+            if (result.Succeeded)
+            {
+                ToastService.ShowSuccess("Profile picture added.", 7000);
+            }
+            else
+            {
+                foreach (var error in result.Messages)
+                {
+                    ToastService.ShowError(error, 7000);
+                }
+            }
+        }
+        _formUploading = false;
+        StateHasChanged();
+    }
+    public UpdateProfileRequest _profileModel = new();
+
+    private async Task UpdateProfileAsync()
+    {
+        var response = await _accountManager.UpdateProfileAsync(_profileModel);
+        if (response.Succeeded)
+        {
+
+
+            if (Id == CurrentUserId)
+            {
+                await _authenticationManager.Logout();
+                ToastService.ShowSuccess("Your Profile has been updated. Please Login to Continue.", 7000);
+                _navigationManager.NavigateTo("/");
+            }
+            else
+            {
+                ToastService.ShowSuccess($"Your Profile {_profileModel.UserName} has been updated", 7000);
+            }
+        }
+        else
+        {
+            foreach (var message in response.Messages)
+            {
+                ToastService.ShowError(message, 7000);
+            }
+        }
+    }
+
+    private async Task ToggleUserStatus()
+    {
+        var request = new ToggleUserStatusRequest { ActivateUser = _active, UserId = Id };
+        var result = await _userManager.ToggleUserStatusAsync(request);
+        if (result.Succeeded)
+        {
+            ToastService.ShowSuccess("Updated User Status.", 7000);
+            //_navigationManager.NavigateTo("/identity/users");
+        }
+        else
+        {
+            foreach (var error in result.Messages)
+            {
+                ToastService.ShowError(error, 7000);
+            }
+        }
+    }
+    public string ImageDataUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = Id;
+        var result = await _userManager.GetAsync(userId.ToString());
+        if (result.Succeeded)
+        {
+            user = result.Data;
+
+            if (user != null)
+            {
+                _profileModel.PhoneNumber = user.PhoneNumber;
+                _profileModel.Email = user.Email;
+                _profileModel.Name = user.Name;
+                _profileModel.Designation = user.Designation;
+                _profileModel.Id = user.Id;
+                _profileModel.UserName = user.UserName;
+
+                _active = user.IsActive;
+            }
+            Title = $"{user!.UserName}'s Profile";
+        }
+
+        var data = await _accountManager.GetProfilePictureAsync(userId.ToString());
+        if (data.Succeeded)
+        {
+            var format = "image/png";
+            ImageDataUrl = $"data:{format};base64,{data.Data}";
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        var state = await _stateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+        if (user == null) return;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            if (CurrentUserId>0)
+            {
+                CurrentUserId = Convert.ToInt32( user.GetUserId());
+            }
+        }
+        StateHasChanged();
+
+        _loaded = true;
+    }
+
+    [Parameter] public int Id { get; set; }
+    private async Task ChangePasswordAsync()
+    {
+        _changeModel.Id = Id;
+        var response = await _accountManager.ChangePasswordAsync(_changeModel, Id.ToString());
+        if (response.Succeeded)
+        {
+            ToastService.ShowSuccess("Password Changed!", 7000);
+            _changeModel.OldPassword = string.Empty;
+            _changeModel.NewPassword = string.Empty;
+            _changeModel.ConfirmNewPassword = string.Empty;
+        }
+        else
+        {
+            foreach (var error in response.Messages)
+            {
+                ToastService.ShowError(error, 7000);
+            }
+        }
+    }
+
+    private async Task UpdatePasswordAsync()
+    {
+        _passwordModel.Id = Id;
+        var response = await _accountManager.UpdatePasswordAsync(_passwordModel, Id.ToString());
+        if (response.Succeeded)
+        {
+            ToastService.ShowSuccess("Password Changed!", 7000);
+            _passwordModel.NewPassword = string.Empty;
+            _passwordModel.ConfirmNewPassword = string.Empty;
+        }
+        else
+        {
+            foreach (var error in response.Messages)
+            {
+                ToastService.ShowError(error, 7000);
+            }
+        }
+    }
+
+}

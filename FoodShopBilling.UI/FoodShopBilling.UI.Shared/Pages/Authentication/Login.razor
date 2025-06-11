@@ -1,0 +1,107 @@
+﻿@attribute [AllowAnonymous]
+
+@page "/auth/login"
+@using FoodShopBilling.Utilities.Requests.Identity
+
+<FluentStack Style="margin-top:30px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Stretch">
+    <FluentGrid>
+        <FluentGridItem md="12">
+            <FluentCard Style="padding:10px; width:400px;">
+                <br />
+                <br />
+                <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                    <img style="width:250px;" src="/Files/Logos/logo.png" />
+                </FluentStack>
+                <br />
+                <br />
+                <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+
+                    <EditForm Model="@Token" OnValidSubmit="@HandleValidSubmit" FormName="LogiForm" novalidate>
+                        <DataAnnotationsValidator />
+                        <FluentStack Style="padding:10px;" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Vertical" VerticalGap="3">
+
+                            <FluentTextField Label="User Name" @bind-Value="Token.UserName" Placeholder="User Name"></FluentTextField>
+                            <FluentValidationMessage For="@(() => Token.UserName)" />
+                        </FluentStack>
+                        <FluentStack Style="padding:10px;" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Vertical" VerticalGap="3">
+
+                            <FluentTextField Label="Password" @bind-Value="Token.Password" TextFieldType="TextFieldType.Password" Placeholder="Password"></FluentTextField>
+                            <FluentValidationMessage For="@(() => Token.Password)" />
+                        </FluentStack>
+                        <br />
+                        <FluentStack Style="padding:10px;" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Horizontal" VerticalGap="3">
+                            <FluentCheckbox Label="Remember me" @bind-Value="Token.RememberMe" />
+                        </FluentStack>
+                        <FluentStack HorizontalAlignment="HorizontalAlignment.SpaceBetween" VerticalAlignment="VerticalAlignment.Center" Orientation="Orientation.Horizontal">
+                            <FluentButton Type="ButtonType.Reset" Appearance="Appearance.Stealth">Reset</FluentButton>
+                            <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent">Submit</FluentButton>
+                        </FluentStack>
+                        <br />
+                        <br />
+                    </EditForm>
+                </FluentStack>
+            </FluentCard>
+        </FluentGridItem>
+    </FluentGrid>
+</FluentStack>
+
+@code {
+    private TokenRequest Token = new();
+    private IDialogReference? _dialog;
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            DialogParameters<SplashScreenContent> parameters = new()
+            {
+                Content = new SplashScreenContent()
+                {
+                    Title = "Smart Billing",
+                    LoadingText = "Logging In...",
+                    SubTitle = "Please wait!",
+                    DisplayTime = 7000
+                },
+                Width = "450px",
+                Height = "350px",
+            };
+            _dialog = await _dialogService.ShowSplashScreenAsync(parameters);
+            var splashScreen = (SplashScreenContent)_dialog.Instance.Content;
+
+            var res = await _authenticationManager.Login(Token);
+            if (res != null && res.Succeeded)
+            {
+                // Update the splash screen content and simulate a second task
+                splashScreen.UpdateLabels(loadingText: "Logged In...");
+                //await Task.Delay(2000);
+
+                await _dialog.CloseAsync();
+
+                DialogResult result = await _dialog.Result;
+                await HandleDefaultSplashAsync(result);
+            }
+            else
+            {
+                Console.WriteLine("Login failed");
+                ToastService.ShowError(res!.Messages[0], 7000);
+                // Update the splash screen content and simulate a second task
+                splashScreen.UpdateLabels(loadingText: "Login failed...");
+                //await Task.Delay(2000);
+
+                await _dialog.CloseAsync();
+
+                DialogResult result = await _dialog.Result;
+                await HandleDefaultSplashAsync(result);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            ToastService.ShowError(ex.Message, 7000);
+        }
+    }
+    private async Task HandleDefaultSplashAsync(DialogResult result)
+    {
+        await Task.Run(() => Console.WriteLine($"Default splash closed"));
+    }
+}

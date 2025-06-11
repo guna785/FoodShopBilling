@@ -1,0 +1,193 @@
+﻿@page "/administrator/roles"
+
+@using FoodShopBilling.Shared.Constants.Role
+@using FoodShopBilling.UI.Shared.Managers.Identity.Roles
+@using FoodShopBilling.Utilities.Responses.Identity
+@using FoodShopBilling.Utilities.Requests.Identity
+<FluentStack Style="padding:15px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Stretch">
+    <FluentGrid>
+        <FluentGridItem md="12">
+            <FluentBreadcrumb>
+                <FluentBreadcrumbItem Href="/">
+                    Home
+                    <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.Home())" Color="@Color.Neutral" Slot="start" />
+                </FluentBreadcrumbItem>
+                <FluentBreadcrumbItem Href="#">
+                    Roles
+                    <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.People())" Color="@Color.Neutral" Slot="start" />
+                </FluentBreadcrumbItem>
+            </FluentBreadcrumb>
+        </FluentGridItem>
+        <FluentGridItem md="12">
+            <FluentCard>
+                <FluentStack Style="padding:10px;" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Stretch" Orientation="Orientation.Vertical">
+                    <FluentStack Style="padding:20px;" Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Start" VerticalAlignment="VerticalAlignment.Center">
+                        <FluentButton OnClick="@(()=>AddEditRole(null))" Appearance="Appearance.Accent" IconStart="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.AddCircle())">Add</FluentButton>
+                    </FluentStack>
+                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment=" VerticalAlignment.Center">
+                        <div style="max-height: 600px; min-height:150px; overflow-x:auto; display:flex;" tabindex="-1">
+                            <FluentDataGrid @ref="dataGrid"
+                                            Items="roles"
+                                            RefreshItems="RefreshItemsAsync"
+                                            OnRowDoubleClick="@(()=>Console.WriteLine("Row double clicked!"))"
+                                            RowSize="DataGridRowSize.Medium"
+                                            GenerateHeader="GenerateHeaderOption.Sticky"
+                                            TGridItem="RoleResponse"
+                                            Loading="loading"
+                                            Pagination="pagination">
+
+                                <PropertyColumn Property="@(c => c!.Name)" Sortable="true">
+                                    <ColumnOptions>
+                                        <div class="search-box">
+                                            <FluentSearch type="search" Autofocus=true @bind-Value=nameFilter @oninput="HandleRoleNameFilter" @bind-Value:after="HandleClear" Placeholder="Name..." />
+                                        </div>
+                                    </ColumnOptions>
+                                </PropertyColumn>
+                                <PropertyColumn Property="@(c => c!.Description)" Sortable="true">
+
+                                </PropertyColumn>
+                                <TemplateColumn Title="Actions" Align="@Align.End" Sortable="false">
+                                    <FluentButton aria-label="Edit Role" Title="Edit" IconEnd="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.Edit())" OnClick="@(()=>AddEditRole(context))" />
+                                    <FluentButton aria-label="Role Permissions" Title="Role Permissions" IconEnd="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.AccessibilityMore())" OnClick="@(()=>UpdateRolePermissions(context))" />
+                                    <FluentButton aria-label="Delete item" Title="Delete item" IconEnd="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.Delete())" OnClick="@(() => DeleteRole(context))" />
+                                </TemplateColumn>
+                            </FluentDataGrid>
+                        </div>
+                        <FluentPaginator State="@pagination" />
+                    </FluentStack>
+
+                </FluentStack>
+
+            </FluentCard>
+        </FluentGridItem>
+    </FluentGrid>
+
+</FluentStack>
+
+@code {
+    [Inject] private IRoleManager manager { get; set; } = default!;
+    FluentDataGrid<RoleResponse> dataGrid = default!;
+    IQueryable<RoleResponse> roles = default!;
+    string nameFilter = string.Empty;
+    bool loading = true;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    protected async Task RefreshItemsAsync(GridItemsProviderRequest<RoleResponse> req)
+    {
+        loading = true;
+        await InvokeAsync(StateHasChanged);
+
+        RolePaginatedRequest request = new()
+            {
+                PageSize = req.Count ?? 10,
+
+                PageNumber = req.StartIndex
+            };
+
+
+        var s = req.GetSortByProperties().FirstOrDefault();
+        if (req.SortByColumn != null && !string.IsNullOrEmpty(s.PropertyName))
+        {
+            request.Orderby = new string[] { s.PropertyName + (s.Direction == SortDirection.Ascending ? " ASC" : " DESC") };
+        }
+
+
+        var response = await manager.GetPagedAsync(request);
+
+        roles = response!.Data.AsQueryable();
+        await pagination.SetTotalItemCountAsync(response!.TotalCount);
+
+        loading = false;
+        await InvokeAsync(StateHasChanged);
+
+    }
+
+
+
+    public async Task DataGridRefreshDataAsync()
+    {
+        await dataGrid.RefreshDataAsync(true);
+    }
+    private async Task HandleRoleNameFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            nameFilter = value;
+        }
+    }
+    private void HandleClear()
+    {
+        if (string.IsNullOrWhiteSpace(nameFilter))
+        {
+            nameFilter = string.Empty;
+        }
+    }
+    private async Task AddEditRole(RoleResponse? role)
+    {
+        var parameters = new DialogParameters
+            {
+                Title = role == null ? "Add Role" : "Update Role",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true
+            };
+
+        var dialog = await _dialogService.ShowDialogAsync<AddEditUserRoleDialog>((role == null ? new RoleRequest() : new RoleRequest()
+            {
+                Description = role.Description,
+                Id = role.Id,
+                Name = role.Name
+            }), parameters);
+        var dialogResult = await dialog.Result;
+    }
+
+    private async Task UpdateRolePermissions(RoleResponse? role)
+    {
+        var parameters = new DialogParameters
+            {
+                Title = role == null ? "Add Role" : "Update Role",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true,
+                Id = role!.Id.ToString(),
+                Width = "90%"
+            };
+
+        var dialog = await _dialogService.ShowDialogAsync<UpdateRolePermission>(new PermissionRequest(), parameters);
+        var dialogResult = await dialog.Result;
+    }
+    private async Task DeleteRole(RoleResponse data)
+    {
+        if (data.Name.ToLower().Equals(RoleConstants.AdministratorRole.ToLower()))
+        {
+            _ = await _dialogService.ShowWarningAsync("Admin Role can't be deleted!..", null, "Close");
+        }
+        else
+        {
+            var dialog = await _dialogService.ShowMessageBoxAsync(new DialogParameters<MessageBoxContent>()
+                {
+                    Content = new()
+                    {
+                        Title = "Delete Role",
+                        MarkupMessage = new MarkupString($"Are  you sure want to delete <strong> {data.Name} </strong> this item"),
+                        Icon = new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.Delete(),
+                        IconColor = Color.Warning,
+                    },
+                    PrimaryAction = "Yes",
+                    SecondaryAction = "Cancel",
+                    Width = "300px",
+                });
+            var result = await dialog.Result;
+            if (!result.Cancelled)
+            {
+                var res = await manager.DeleteAsync(data.Id.ToString());
+                if (res.Succeeded)
+                {
+                    ToastService.ShowSuccess(res!.Messages[0], 7000);
+                }
+                else
+                {
+                    ToastService.ShowError(res!.Messages[0], 7000);
+                }
+            }
+        }
+    }
+}
+

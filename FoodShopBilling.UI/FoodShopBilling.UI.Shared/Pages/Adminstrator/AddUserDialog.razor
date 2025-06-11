@@ -1,0 +1,110 @@
+﻿@using FoodShopBilling.Domain.Enums
+@using FoodShopBilling.Utilities.Requests.Identity
+@implements IDialogContentComponent<RegisterRequest>
+<EditForm Model="@Content" OnValidSubmit="@SaveAsync" FormName="LogiForm" novalidate>
+    <FluentDialogHeader ShowDismiss="false">
+        <FluentStack VerticalAlignment="VerticalAlignment.Center">
+            <FluentIcon Value="@( new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.AddCircle())" />
+            <FluentLabel Typo="Typography.PaneHeader">
+                @Dialog.Instance.Parameters.Title
+            </FluentLabel>
+        </FluentStack>
+    </FluentDialogHeader>
+    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+        <FluentGrid>
+            <FluentGridItem md="6">
+                <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                    <FluentTextField Label="Name *" @bind-Value="@Content.Name" />
+                    <FluentTextField Label="Email Id *" @bind-Value="@Content.Email" />
+                    <FluentTextField Label="Phone No" @bind-Value="@Content.PhoneNumber" />
+                    <FluentSelect @bind-Value="@Content.Gender" TOption="string">
+                        <FluentOption Value="@GenderType.Male.ToString()">
+                            @GenderType.Male.ToString()
+                            <FluentEmoji Value="@(new Microsoft.FluentUI.AspNetCore.Components.Emojis.Symbols.Color.Default.MaleSign())" Color="@Color.Neutral" Slot="start" />
+                        </FluentOption>
+                        <FluentOption Value="@GenderType.Female.ToString()">
+                            @GenderType.Female.ToString()
+                            <FluentEmoji Value="@(new Microsoft.FluentUI.AspNetCore.Components.Emojis.Symbols.Color.Default.FemaleSign())" Color="@Color.Neutral" Slot="start" />
+                        </FluentOption>
+                        <FluentOption Value="@GenderType.Others.ToString()">
+                            @GenderType.Others.ToString()
+                            <FluentEmoji Value="@(new Microsoft.FluentUI.AspNetCore.Components.Emojis.Symbols.Color.Default.TransgenderSymbol())" Color="@Color.Neutral" Slot="start" />
+                        </FluentOption>
+
+                    </FluentSelect>
+                </FluentStack>
+            </FluentGridItem>
+            <FluentGridItem md="6">
+                <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                    <FluentTextField Label="User Name *" @bind-Value="@Content.UserName" />
+                    <FluentTextField Label="Password *" @bind-Value="@Content.Password" />
+                    <FluentTextField Label="Confirm Password *" @bind-Value="@Content.ConfirmPassword" />
+                </FluentStack>
+            </FluentGridItem>
+            <FluentGridItem md="12">
+                <FluentCheckbox Label="Activate User" Disabled="true" @bind-Value="@Content.ActivateUser" />
+                <FluentCheckbox Label="Auto Confirm Email" Disabled="true" @bind-Value="@Content.AutoConfirmEmail" />
+            </FluentGridItem>
+        </FluentGrid>
+
+
+
+
+
+    </FluentStack>
+    <FluentDialogFooter>
+        <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" IconStart="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Save())">Save</FluentButton>
+        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+    </FluentDialogFooter>
+</EditForm>
+@code {
+    [Parameter]
+    public RegisterRequest Content { get; set; } = default!;
+    [Inject] private IUserManager manager { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+    private IDialogReference? _dialog;
+    private async Task SaveAsync()
+    {
+        DialogParameters<SplashScreenContent> parameters = new()
+            {
+                Content = new SplashScreenContent()
+                {
+                    Title = "Smart Billing",
+                    LoadingText = $"Adding / Updating User {Content.UserName}... ",
+                    Message = (MarkupString)"Please wait!",
+                    DisplayTime = 7000
+                },
+                Width = "500px",
+                Height = "300px",
+            };
+        _dialog = await _dialogService.ShowSplashScreenAsync(parameters);
+        var splashScreen = (SplashScreenContent)_dialog.Instance.Content;
+
+        var res = await manager.RegisterUserAsync(Content);
+        if (res.Succeeded)
+        { // Update the splash screen content and simulate a second task
+            splashScreen.UpdateLabels(loadingText: $"{res!.Messages[0]}...");
+            //await Task.Delay(2000);
+
+            await _dialog.CloseAsync();
+            ToastService.ShowSuccess(res!.Messages[0], 7000);
+            await Dialog.CloseAsync(Content);
+        }
+        else
+        { // Update the splash screen content and simulate a second task
+            splashScreen.UpdateLabels(loadingText: $"{res!.Messages[0]}...");
+            //await Task.Delay(2000);
+
+            await _dialog.CloseAsync();
+            ToastService.ShowError(res!.Messages[0], 7000);
+        }
+
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
+}

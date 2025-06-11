@@ -1,6 +1,7 @@
 ﻿using DataTables.AspNet.AspNetCore;
 using DataTables.AspNet.Core;
 using FoodShopBilling.Shared.Wrapper;
+using FoodShopBilling.Utilities.Requests;
 using FoodShopBilling.Utilities.Responses.Audit;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace FoodShopBilling.Application.Interfaces
     public interface IAuditService
     {
         Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserProfileTrailsAsync(string userId);
-
+        Task<PaginatedResult<AuditResponse>> GetAuditPaginated(AuditPagedRequest request);
         Task<DataTablesJsonResult> GetPaginatedAsync(IDataTablesRequest request);
         Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync(string userId);
 

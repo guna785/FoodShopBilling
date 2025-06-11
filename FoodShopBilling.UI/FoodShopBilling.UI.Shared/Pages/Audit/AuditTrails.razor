@@ -1,0 +1,125 @@
+﻿@page "/audit/logs"
+
+@using FoodShopBilling.Shared.Constants.Role
+@using FoodShopBilling.UI.Shared.Managers.Audit
+@using FoodShopBilling.UI.Shared.Managers.Identity.Roles
+@using FoodShopBilling.Utilities.Requests
+@using FoodShopBilling.Utilities.Responses.Audit
+@using FoodShopBilling.Utilities.Responses.Identity
+@using FoodShopBilling.Utilities.Requests.Identity
+<FluentStack Style="padding:15px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Stretch">
+    <FluentGrid>
+        <FluentGridItem md="12">
+            <FluentBreadcrumb>
+                <FluentBreadcrumbItem Href="/">
+                    Home
+                    <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.Home())" Color="@Color.Neutral" Slot="start" />
+                </FluentBreadcrumbItem>
+                <FluentBreadcrumbItem Href="#">
+                    Audit Logs
+                    <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.EyeTracking())" Color="@Color.Neutral" Slot="start" />
+                </FluentBreadcrumbItem>
+            </FluentBreadcrumb>
+        </FluentGridItem>
+        <FluentGridItem md="12">
+            <FluentCard>
+                <FluentStack Style="padding:10px;" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Stretch" Orientation="Orientation.Vertical">
+
+                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Center" VerticalAlignment=" VerticalAlignment.Center">
+                        <div style="max-height: 600px; min-height:150px; overflow-x:auto; display:flex;" tabindex="-1">
+                            <FluentDataGrid @ref="dataGrid"
+                                            Items="roles"
+                                            RefreshItems="RefreshItemsAsync"
+                                            OnRowDoubleClick="@(()=>Console.WriteLine("Row double clicked!"))"
+                                            RowSize="DataGridRowSize.Medium"
+                                            GenerateHeader="GenerateHeaderOption.Sticky"
+                                            TGridItem="AuditResponse"
+                                            Loading="loading"
+                                            Pagination="pagination">
+
+
+                                <PropertyColumn Property="@(c => c!.TableName)" Sortable="true" />
+                                <PropertyColumn Property="@(c => c!.UserId)" Sortable="true">
+                                    <ColumnOptions>
+                                        <div class="search-box">
+                                            <FluentSearch type="search" Autofocus=true @bind-Value=nameFilter @oninput="HandleRoleNameFilter" @bind-Value:after="HandleClear" Placeholder="Name..." />
+                                        </div>
+                                    </ColumnOptions>
+                                </PropertyColumn>
+                                <PropertyColumn Property="@(c => c!.PrimaryKey)" Sortable="true" />
+                                <PropertyColumn Property="@(c => c!.Type)" Sortable="true" />
+                                <PropertyColumn Property="@(c => c!.DateTime)" Format="dd/MM/yyyy hh:mm:ss tt" Sortable="true" />
+                                <PropertyColumn Property="@(c => c!.OldValues)" Sortable="true" />
+                                <PropertyColumn Property="@(c => c!.NewValues)" Sortable="true" />
+                            </FluentDataGrid>
+                        </div>
+                        <FluentPaginator State="@pagination" />
+                    </FluentStack>
+
+                </FluentStack>
+
+            </FluentCard>
+        </FluentGridItem>
+    </FluentGrid>
+
+</FluentStack>
+
+@code {
+    [Inject] private IAuditManager manager { get; set; } = default!;
+    FluentDataGrid<AuditResponse> dataGrid = default!;
+    IQueryable<AuditResponse> roles = default!;
+    string nameFilter = string.Empty;
+    bool loading = true;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    protected async Task RefreshItemsAsync(GridItemsProviderRequest<AuditResponse> req)
+    {
+        loading = true;
+        await InvokeAsync(StateHasChanged);
+
+        AuditPagedRequest request = new()
+            {
+                PageSize = req.Count ?? 10,
+
+                PageNumber = req.StartIndex
+            };
+
+
+        var s = req.GetSortByProperties().FirstOrDefault();
+        if (req.SortByColumn != null && !string.IsNullOrEmpty(s.PropertyName))
+        {
+            request.Orderby = new string[] { s.PropertyName + (s.Direction == SortDirection.Ascending ? ":asc" : ":desc") };
+        }
+
+
+        var response = await manager.GetPaginated(request);
+
+        roles = response!.Data.AsQueryable();
+        await pagination.SetTotalItemCountAsync(response!.TotalCount);
+
+        loading = false;
+        await InvokeAsync(StateHasChanged);
+
+    }
+
+
+
+    public async Task DataGridRefreshDataAsync()
+    {
+        await dataGrid.RefreshDataAsync(true);
+    }
+    private async Task HandleRoleNameFilter(ChangeEventArgs args)
+    {
+        if (args.Value is string value)
+        {
+            nameFilter = value;
+        }
+    }
+    private void HandleClear()
+    {
+        if (string.IsNullOrWhiteSpace(nameFilter))
+        {
+            nameFilter = string.Empty;
+        }
+    }
+}
+

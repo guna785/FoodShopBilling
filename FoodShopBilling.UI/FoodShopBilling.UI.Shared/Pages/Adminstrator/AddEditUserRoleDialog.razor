@@ -1,0 +1,71 @@
+﻿@using FoodShopBilling.UI.Shared.Managers.Identity.Roles
+@using FoodShopBilling.Utilities.Requests.Identity
+@implements IDialogContentComponent<RoleRequest>
+<EditForm Model="@Content" OnValidSubmit="@SaveAsync" FormName="LogiForm" novalidate>
+    <FluentDialogHeader ShowDismiss="false">
+        <FluentStack VerticalAlignment="VerticalAlignment.Center">
+            <FluentIcon Value="@( new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.AddCircle())" />
+            <FluentLabel Typo="Typography.PaneHeader">
+                @Dialog.Instance.Parameters.Title
+            </FluentLabel>
+        </FluentStack>
+    </FluentDialogHeader>
+    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+        <FluentGrid>
+            <FluentGridItem md="12">
+                @if (Content.Id>0)
+                {
+                    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                        <FluentTextField Label="Id *" @bind-Value="@ContentId" />
+                    </FluentStack>
+                }
+                <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                    <FluentTextField Label="Name *" @bind-Value="@Content.Name" />
+                </FluentStack>
+                <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                    <FluentTextField Label="Description " @bind-Value="@Content.Description" />
+                </FluentStack>
+            </FluentGridItem>
+        </FluentGrid>
+    </FluentStack>
+    <FluentDialogFooter>
+        <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" IconStart="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Save())">Save</FluentButton>
+        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+    </FluentDialogFooter>
+</EditForm>
+@code {
+    [Parameter]
+    public RoleRequest Content { get; set; } = default!;
+    [Inject] private IRoleManager manager { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+    private string ContentId
+    {
+        get => Content.Id.ToString();
+        set
+        {
+            if (int.TryParse(value, out var id))
+                Content.Id = id;
+        }
+    }
+    private async Task SaveAsync()
+    {
+        var res = await manager.SaveAsync(Content);
+        if (res.Succeeded)
+        {
+            ToastService.ShowSuccess(res!.Messages[0], 7000);
+            await Dialog.CloseAsync(Content);
+        }
+        else
+        {
+            ToastService.ShowError(res!.Messages[0], 7000);
+        }
+
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
+}

@@ -1,0 +1,95 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components
+@implements IDialogContentComponent<SplashScreenContent>
+<style>
+    .my-splash {
+    font-family: var(--body-font);
+    -webkit-font-smoothing: antialiased;
+    background-color: white;
+    color: rgb(73, 72, 71);
+    --accent-fill-rest: #d3d3d3;
+    user-select: none;
+    }
+
+    .my-splash h1 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-top: 40px;
+    line-height: 40px;
+    margin: 40px 0px 0px 0px;
+    user-select: none;
+    }
+
+    .my-splash h2 {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    margin: 24px 0px 50px 0px;
+    user-select: none;
+    }
+
+    .my-splash h3 {
+    font-size: 12px;
+    font-weight: 300;
+    margin: 0px;
+    user-select: none;
+    }
+
+    .my-splash p {
+    user-select: none;
+    }
+
+    .my-splash .icon {
+    width: 150px;
+    
+    }
+</style>
+<FluentDialogHeader Visible="false" />
+<FluentDialogBody>
+    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" Class="my-splash">
+        <br />
+        <img class="icon" src="@Image" alt="Splash Image" />
+        
+        <h3>
+            @Content.Title
+        </h3>
+        <h3>
+            @Content.SubTitle
+        </h3>
+        <div>
+            <FluentProgress />
+        </div>       
+        <br />
+    </FluentStack>
+</FluentDialogBody>
+<FluentDialogFooter Visible="false" />
+
+@code {
+
+
+    [Parameter]
+    public SplashScreenContent Content { get; set; } = default!;
+    private string Image = string.Empty;
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+    protected override async Task OnInitializedAsync()
+    {
+        var data = await File.ReadAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "Files", "Logos", "logo.png"));
+        var base64 = Convert.ToBase64String(data);
+        var format = "image/png";
+        Image = $"data:{format};base64,{base64}"; 
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+
+            // Simulation of loading process
+            await Task.Delay(Content.DisplayTime);
+
+            // Close the dialog
+            await Dialog.CloseAsync();
+        }
+    }
+}

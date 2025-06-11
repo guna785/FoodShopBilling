@@ -3,6 +3,36 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization
 @using static Microsoft.AspNetCore.Components.Web.RenderMode
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.JSInterop
+@using Microsoft.FluentUI.AspNetCore.Components
+
+@using FoodShopBilling.UI.Shared
+@using FoodShopBilling.UI.Shared.Authentication
+@using FoodShopBilling.UI.Shared.Layout
+@using FoodShopBilling.UI.Shared.Managers.Identity.Users
+@using FoodShopBilling.UI.Shared.Managers.Preferences
+@using FoodShopBilling.UI.Shared.Pages.Authentication
+@using FoodShopBilling.UI.Shared.Storage
+@using FoodShopBilling.UI.Shared.Managers.Identity.Authentication
+@using FoodShopBilling.UI.Shared.Managers.Identity.Account
+@using System.Security.Claims
+
+
+@inject IClientSessionSecureStorage _storage;
+@inject NavigationManager _navigationManager
+@inject IDialogService _dialogService
+
+@inject IAuthenticationManager _authenticationManager
+@inject IAccountManager _accountManager
+@inject NavigationManager _navigationManager
+@inject BillingAppServerStateProvider _stateProvider
+@inject IAuthorizationService _authorizationService
+@inject IDialogService _dialogService
+@inject HttpClient _httpClient
+@inject IUserManager _userManager
+@inject IToastService ToastService
+@inject IJSRuntime _jsRuntime

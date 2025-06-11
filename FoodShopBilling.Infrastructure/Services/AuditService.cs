@@ -1,21 +1,22 @@
 ﻿using AutoMapper;
-using FoodShopBilling.Infrastructure.Contexts;
-using FoodShopBilling.Infrastructure.Models.Audit;
-using FoodShopBilling.Infrastructure.Specifications;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
-using FoodShopBilling.Application.Extensions;
-using FoodShopBilling.Application.Interfaces.Services;
-using FoodShopBilling.Shared.Wrapper;
-using System.Globalization;
 using DataTables.AspNet.AspNetCore;
 using DataTables.AspNet.Core;
-using FoodShopBilling.Infra.Infrastructure.Specifications;
-using FoodShopBilling.Infrastructure.Models.Identity;
-using Microsoft.AspNetCore.Identity;
-using System.Linq.Expressions;
-using FoodShopBilling.Utilities.Responses.Audit;
+using FoodShopBilling.Application.Extensions;
 using FoodShopBilling.Application.Interfaces;
+using FoodShopBilling.Application.Interfaces.Services;
+using FoodShopBilling.Infra.Infrastructure.Specifications;
+using FoodShopBilling.Infrastructure.Contexts;
+using FoodShopBilling.Infrastructure.Models.Audit;
+using FoodShopBilling.Infrastructure.Models.Identity;
+using FoodShopBilling.Infrastructure.Specifications;
+using FoodShopBilling.Shared.Wrapper;
+using FoodShopBilling.Utilities.Requests;
+using FoodShopBilling.Utilities.Responses.Audit;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using System.Globalization;
+using System.Linq.Expressions;
 
 namespace FoodShopBilling.Infrastructure.Services
 {
@@ -104,5 +105,34 @@ namespace FoodShopBilling.Infrastructure.Services
 
 			return new DataTablesJsonResult(response);
 		}
-	}
+
+        public async Task<PaginatedResult<AuditResponse>> GetAuditPaginated(AuditPagedRequest request)
+        {
+            Expression<Func<Audit, AuditResponse>> expression = e => new AuditResponse
+            {
+
+                Id = e.Id,
+                UserId = e.UserId!,
+                TableName = e.TableName,
+                Type = e.Type,
+                AffectedColumns = e.AffectedColumns!,
+                DateTime = e.DateTime,
+                NewValues = e.NewValues!,
+                OldValues = e.OldValues!,
+                PrimaryKey = e.PrimaryKey!
+            };
+            // Convert them into view models
+            var rows = _context.AuditTrails;
+
+            AuditFilterSpecification locationFilter = new(request.SearchString);
+            var filteredRows = rows.AsQueryable()
+                   .Specify(locationFilter).Select(expression);
+
+            // Ordering and Paging
+            var pagedRows = await filteredRows
+                .ToPaginatedListAsync(request.PageNumber, request.PageSize);
+
+            return pagedRows;
+        }
+    }
 }

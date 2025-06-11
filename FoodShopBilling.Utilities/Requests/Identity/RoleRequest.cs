@@ -4,7 +4,7 @@ namespace FoodShopBilling.Utilities.Requests.Identity
 {
     public class RoleRequest
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }

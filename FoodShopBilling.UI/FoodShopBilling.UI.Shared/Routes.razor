@@ -1,6 +1,38 @@
-﻿<Router AppAssembly="typeof(Layout.MainLayout).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
-        <FocusOnNavigate RouteData="routeData" Selector="h1" />
-    </Found>
-</Router>
+﻿@using FoodShopBilling.UI.Shared.Pages
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="typeof(Layout.MainLayout).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <Login />
+                </NotAuthorized>
+                <Authorizing>
+                    <FoodShopBilling.UI.Shared.Pages.Splash.SplashScreen Content="@content"></FoodShopBilling.UI.Shared.Pages.Splash.SplashScreen>
+                </Authorizing>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <LayoutView Layout="typeof(MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+
+@code {
+    SplashScreenContent content = new SplashScreenContent()
+    {
+        Title = "Smart Billing",
+        LoadingText = "Checking Authorization...",
+        SubTitle = "Please wait!",
+        DisplayTime = 100000
+    };
+    bool isLoading = true;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        isLoading = false;
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

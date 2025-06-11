@@ -14,6 +14,7 @@ using DataTables.AspNet.Core;
 using FoodShopBilling.Infrastructure.Specifications;
 using FoodShopBilling.Application.Extensions;
 using System.Linq.Expressions;
+using System.Linq.Dynamic.Core;	
 using FoodShopBilling.Infra.Infrastructure.Specifications;
 using FoodShopBilling.Utilities.Responses.Identity;
 using FoodShopBilling.Utilities.Requests.Identity;
@@ -147,7 +148,7 @@ namespace FoodShopBilling.Infrastructure.Services.Identity
 
 		public async Task<Result<string>> SaveAsync(RoleRequest request)
 		{
-			if (request.Id is null or 0)
+			if (request.Id == 0)
 			{
 				request.Id = 0;
 				ApplicationRole existingRole = await _roleManager.FindByNameAsync(request.Name);
@@ -279,5 +280,28 @@ namespace FoodShopBilling.Infrastructure.Services.Identity
 
 			return new DataTablesJsonResult(response);
 		}
-	}
+        public async Task<PaginatedResult<RoleResponse>> GetPaginatedAsync(RolePaginatedRequest request)
+        {
+            var rows = _roleManager.Roles;
+            Expression<Func<ApplicationRole, RoleResponse>> expression = e => new RoleResponse
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Description = e.Description
+            };
+            RoleFilterSpecification locationFilter = new(request.SearchString);
+            var filteredRows = rows.AsQueryable()
+                   .Specify(locationFilter).Select(expression);
+            if (request.Orderby != null && request.Orderby.Length > 0)
+            {
+                string ordering = string.Join(",", request.Orderby);
+                filteredRows = filteredRows.OrderBy(ordering);
+            }
+            // Ordering and Paging
+            var pagedRows = await filteredRows
+                .ToPaginatedListAsync(request.PageNumber, request.PageSize);
+
+            return pagedRows;
+        }
+    }
 }

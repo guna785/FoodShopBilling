@@ -1,23 +1,221 @@
 ﻿@inherits LayoutComponentBase
+@using FoodShopBilling.UI.Shared.Extensions
+<FluentLayout>
+    <FluentToastProvider />
+    <FluentDialogProvider />
+    <FluentTooltipProvider />
+    <FluentMessageBarProvider />
+    <FluentMenuProvider />
+    <FluentDesignTheme @bind-Mode="@Mode"
+                       OnLoaded="@OnLoaded"
+                       CustomColor="#D4AF37"
+                       NeutralBaseColor="#fdfaf6"
+                       OnLuminanceChanged="@OnLuminanceChanged"
+                       StorageName="theme" />
+    <CascadingAuthenticationState>
+        <AuthorizeView>
+            <NotAuthorized>
+                <FluentHeader>
+                    <FluentStack HorizontalAlignment="@HorizontalAlignment.End"
+                                 VerticalAlignment="@VerticalAlignment.Center"
+                                 Style="height: 48px;padding-inline-end: 10px; ">
+                        <FluentIcon Color="@themeColor" OnClick="ThemeChange" Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Color())" />
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+                    </FluentStack>
+                </FluentHeader>
+                <FluentStack Orientation="Orientation.Horizontal" Width="100%">
+                    <FluentBodyContent>
+                        <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                            <Login />
+                            <FluentFooter>
+                                <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+                                    © @DateTime.Today.Year All Rights Reserved.
+                                    <a href="https://auxinz.io/" target="_blank"> Auxinzio Private LTD.</a>
+                                </FluentStack>
+                            </FluentFooter>
+                        </FluentStack>
+                    </FluentBodyContent>
+                </FluentStack>
+            </NotAuthorized>
+            <Authorized>
+                <FluentHeader>
+                    <FluentStack Orientation="Orientation.Horizontal" VerticalAlignment="VerticalAlignment.Center" HorizontalAlignment="HorizontalAlignment.Start">
+                        <h4>Billing App</h4>
+                        <FluentIcon OnClick="NavMenuOpen" Color="Color.Lightweight" Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.LineHorizontal4())" />
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+                    </FluentStack>
+                    <FluentStack HorizontalAlignment="@HorizontalAlignment.End"
+                                 VerticalAlignment="@VerticalAlignment.Center"
+                                 Style="height: 48px;padding-inline-end: 10px; ">
+                        <FluentIcon Color="@themeColor" OnClick="ThemeChange" Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Color())" />
+                        <FluentProfileMenu Image="@("data:image/png;base64," + ImageDataUrl)"
+                                           Status="@PresenceStatus.Available"
+                                           HeaderLabel=""
+                                           Initials="@FirstLetterOfName.ToString()"
+                                           FullName="@FirstName"
+                                           EMail="@Email"
+                                           OnFooterLinkClick="ViewProfile"
+                                           OnHeaderButtonClick="Logout"
+                                           PopoverStyle="min-width: 330px;" />
+                    </FluentStack>
+                </FluentHeader>
+                <FluentStack Orientation="Orientation.Horizontal" Width="100%">
+                    <div class="sidebar @(isNavVisible ? "visible" : "hidden")">
+                        <NavMenu IsNavVisible="@isNavVisible" />
+                    </div>
+                <div class="main-content @(isNavVisible ? "shifted" : "")">
+                    <FluentBodyContent>
+                        <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Stretch">
+                            @Body
+                            <FluentFooter>
+                                <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                                    <span>
+                                        © @DateTime.Today.Year All Rights Reserved.
+                                        <a href="https://auxinz.io/" target="_blank"> Auxinzio Private LTD.</a>
+                                    </span>
+                                </FluentStack>
+                            </FluentFooter>
+                        </FluentStack>
+                    </FluentBodyContent>
+                </div>
+                </FluentStack>
+            </Authorized>
+        </AuthorizeView>
+    </CascadingAuthenticationState>
+</FluentLayout>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+@code {
 
+    bool isNavVisible = false;
+    private string CurrentUserId { get; set; }
+    private string ImageDataUrl { get; set; }
+    private string FirstName { get; set; }
+    private string SecondName { get; set; }
+    private string Email { get; set; }
+    private char FirstLetterOfName { get; set; }
+    private async Task NavMenuOpen(MouseEventArgs args)
+    {
+        isNavVisible = !isNavVisible;
+    }
+    void OnClick(MouseEventArgs e)
+    {
+        Console.WriteLine("NavMenu item clicked");
+    }
+    public DesignThemeModes Mode { get; set; } = DesignThemeModes.Light;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        var state = await _stateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+        if (user == null) return;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            if (string.IsNullOrWhiteSpace(CurrentUserId))
+            {
+                CurrentUserId = user.GetUserId();
+                FirstName = user.GetFirstName();
+                if (FirstName.Length > 0)
+                {
+                    FirstLetterOfName = FirstName[0];
+                }
+
+                SecondName = user.GetLastName();
+                Email = user.GetEmail();
+                var imageResponse = await _accountManager.GetProfilePictureAsync(CurrentUserId);
+                if (imageResponse.Succeeded)
+                {
+                    ImageDataUrl = imageResponse.Data;
+                }
+
+                var currentUserResult = await _userManager.GetAsync(CurrentUserId);
+                if (!currentUserResult.Succeeded || currentUserResult.Data == null)
+                {
+                    ToastService.ShowError("You are logged out because the user with your Token has been deleted.", 7000);
+
+                    CurrentUserId = string.Empty;
+                    ImageDataUrl = string.Empty;
+                    FirstName = string.Empty;
+                    SecondName = string.Empty;
+                    Email = string.Empty;
+                    FirstLetterOfName = char.MinValue;
+                    await _authenticationManager.Logout();
+                }
+            }
+        }
+        StateHasChanged();
+    }
+    public OfficeColor? OfficeColor { get; set; } = Microsoft.FluentUI.AspNetCore.Components.OfficeColor.PowerApps;
+    private Color themeColor = Color.Lightweight;
+
+    void OnLoaded(LoadedEventArgs e)
+    {
+        Console.WriteLine($"Loaded: {(e.Mode == DesignThemeModes.System ? "System" : "")} {(e.IsDark ? "Dark" : "Light")}");
+    }
+
+    void OnLuminanceChanged(LuminanceChangedEventArgs e)
+    {
+        Console.WriteLine($"Changed: {(e.Mode == DesignThemeModes.System ? "System" : "")} {(e.IsDark ? "Dark" : "Light")}");
+    }
+
+    void PickRandomColor()
+    {
+        OfficeColor = OfficeColorUtilities.GetRandom();
+    }
+    private async Task ThemeChange(MouseEventArgs args)
+    {
+        Mode = Mode == DesignThemeModes.Light ? DesignThemeModes.Dark : DesignThemeModes.Light;
+        //themeColor = themeColor == Color.Lightweight ?
+    }
+    private async Task Logout()
+    {
+        ToastService.ShowWarning($"User {FirstName} is Getting Logged Out..", 7000);
+
+        CurrentUserId = string.Empty;
+        ImageDataUrl = string.Empty;
+
+        SecondName = string.Empty;
+        Email = string.Empty;
+        FirstLetterOfName = char.MinValue;
+        await _authenticationManager.Logout();
+        ToastService.ShowWarning($"User {FirstName} is Logged Out..", 7000);
+        FirstName = string.Empty;
+    }
+    private async Task ViewProfile()
+    {
+        _navigationManager.NavigateTo($"/user/profile/{CurrentUserId}", false);
+    }
+}
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+<style>
+    .sidebar {
+        transition: transform 0.3s ease;
+        will-change: transform;
+    }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar.visible {
+            transform: translateX(0);
+        }
+
+    .main-content {
+        flex-grow: 1;
+        transition: margin-left 0.3s ease-in;
+    }
+
+        .main-content.shifted {
+            margin-left: 25px; /* Width of your sidebar */
+        }
+
+</style>

@@ -1,0 +1,169 @@
+﻿@using FoodShopBilling.UI.Shared.Managers.Identity.Roles
+@using FoodShopBilling.UI.Shared.Mappings
+@using FoodShopBilling.Utilities.Requests.Identity
+@using FoodShopBilling.Utilities.Responses.Identity
+
+@using AutoMapper
+@implements IDialogContentComponent<PermissionRequest>
+<EditForm Model="@Content"  OnValidSubmit="@SaveAsync" FormName="LogiForm" novalidate>
+    <FluentDialogHeader ShowDismiss="false">
+        <FluentStack VerticalAlignment="VerticalAlignment.Center">
+            <FluentIcon Value="@( new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.EditProhibited())" />
+            <FluentLabel Typo="Typography.PaneHeader">
+                @Dialog.Instance.Parameters.Title
+            </FluentLabel>
+        </FluentStack>
+    </FluentDialogHeader>
+    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+        <FluentGrid>
+            <FluentGridItem md="12">
+                @if (!_loaded)
+                {
+                    <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                        <FluentProgressRing style="width: 102px; height: 102px;"></FluentProgressRing>
+                    </FluentStack>
+                }
+                else
+                {
+                    <FluentTabs ActiveTabId="@activeTabId" OnTabChange="HandleOnTabChange">
+                        @foreach (var group in GroupedRoleClaims.Keys)
+                        {
+                            var selectedRoleClaimsInGroup = GroupedRoleClaims[group].Where(c => c.Selected).ToList();
+                            var allRoleClaimsInGroup = GroupedRoleClaims[group].ToList() ?? new List<RoleClaimResponse>();
+                            <FluentTab Id="@group">
+                                <Header>
+                                    <FluentIcon Value="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size16.LeafOne())" />
+                                    @group
+                                </Header>
+                                <Content>
+                                    @if (GroupedRoleClaims[group] == null)
+                                    {
+                                        <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                                            <FluentProgressRing style="width: 102px; height: 102px;"></FluentProgressRing>
+                                        </FluentStack>
+                                    }
+                                    else
+                                    {
+                                        <FluentDataGrid Items="@allRoleClaimsInGroup.AsQueryable()"  ShowHover="@SelectFromEntireRow" TGridItem="RoleClaimResponse">
+                                            <SelectColumn TGridItem="RoleClaimResponse"
+                                            SelectMode="@Mode"
+                                            SelectFromEntireRow="@SelectFromEntireRow"
+                                            Property="@(e => e.Selected)"
+                                            OnSelect="@(e => e.Item.Selected = e.Selected)"
+                                            SelectAll="@(allRoleClaimsInGroup.All(p => p.Selected))"
+                                            SelectAllChanged="@(all => allRoleClaimsInGroup.ForEach(p => p.Selected = (all == true)))" />
+                                            <PropertyColumn Property="@(p => p.Type)" />
+                                            <PropertyColumn Property="@(p => p.Value)" />
+                                            <PropertyColumn Property="@(p => p.Description)" />
+                                        </FluentDataGrid>
+                                    }
+                                </Content>
+                            </FluentTab>
+                        }
+                    </FluentTabs>
+                }
+
+            </FluentGridItem>
+        </FluentGrid>
+    </FluentStack>
+    <FluentDialogFooter>
+        <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" IconStart="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Save())">Save</FluentButton>
+        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+    </FluentDialogFooter>
+</EditForm>
+@code {
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    [Parameter]   public PermissionRequest Content { get; set; }
+    [Inject] private IRoleManager RoleManager { get; set; } = default!;
+    bool UseSelectedItems = true;
+    bool SelectFromEntireRow = true;
+    private string activeTabId = string.Empty;
+    DataGridSelectMode Mode = DataGridSelectMode.Multiple;
+    private PermissionResponse _model;
+    private Dictionary<string, List<RoleClaimResponse>> GroupedRoleClaims { get; } = new();
+    private IMapper _mapper;
+    private RoleClaimResponse _roleClaims = new();
+    private RoleClaimResponse _selectedItem = new();
+    private string _searchString = "";
+
+    [Parameter] public string Id { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Description { get; set; }
+
+    private bool _canEditRolePermissions;
+    private bool _canSearchRolePermissions;
+    private bool _loaded;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await GetRolePermissionsAsync();
+        _loaded = true;
+    }
+    private void HandleOnTabChange(FluentTab tab)
+    {
+        activeTabId = tab!.Id;
+    }
+    private async Task GetRolePermissionsAsync()
+    {
+        _mapper = new MapperConfiguration(c => { c.AddProfile<RoleProfile>(); }).CreateMapper();
+        var roleId = Dialog.Instance.Parameters.Id;
+        var result = await RoleManager.GetPermissionsAsync(roleId);
+        if (result.Succeeded)
+        {
+            _model = result.Data;
+            GroupedRoleClaims.Add("All Permissions", _model.RoleClaims);
+            foreach (var claim in _model.RoleClaims)
+            {
+                if (GroupedRoleClaims.ContainsKey(claim.Group))
+                {
+                    GroupedRoleClaims[claim.Group].Add(claim);
+                }
+                else
+                {
+                    GroupedRoleClaims.Add(claim.Group, new List<RoleClaimResponse> { claim });
+                }
+            }
+            if (_model != null)
+            {
+                Description = string.Format("Manage {0} {1}'s Permissions", _model.RoleId, _model.RoleName);
+            }
+
+            activeTabId = GroupedRoleClaims.Keys.FirstOrDefault();
+        }
+        else
+        {
+            foreach (var error in result.Messages)
+            {
+                ToastService.ShowError(error, 7000);
+            }
+            await Dialog.CloseAsync(Content);
+        }
+    }
+
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+
+    private async Task SaveAsync()
+    {
+        var request = _mapper.Map<PermissionResponse, PermissionRequest>(_model);
+        var result = await RoleManager.UpdatePermissionsAsync(request);
+        if (result.Succeeded)
+        {
+            ToastService.ShowSuccess(result.Messages[0], 7000);
+            await Dialog.CloseAsync(Content);
+        }
+        else
+        {
+            foreach (var error in result.Messages)
+            {
+                ToastService.ShowError(error, 7000);
+            }
+        }
+
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
+}

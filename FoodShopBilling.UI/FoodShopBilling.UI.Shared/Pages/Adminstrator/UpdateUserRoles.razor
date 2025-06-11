@@ -1,0 +1,123 @@
+﻿@using FoodShopBilling.UI.Shared.Managers.Identity.Roles
+@using FoodShopBilling.Utilities.Requests.Identity
+@using FoodShopBilling.Utilities.Responses.Identity
+@implements IDialogContentComponent<UpdateUserRolesRequest>
+<EditForm Model="@Content" OnValidSubmit="@SaveAsync" FormName="LogiForm" novalidate>
+    <FluentDialogHeader ShowDismiss="false">
+        <FluentStack VerticalAlignment="VerticalAlignment.Center">
+            <FluentIcon Value="@( new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size24.EditProhibited())" />
+            <FluentLabel Typo="Typography.PaneHeader">
+                @Dialog.Instance.Parameters.Title
+            </FluentLabel>
+        </FluentStack>
+    </FluentDialogHeader>
+    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment=" HorizontalAlignment.Stretch" VerticalAlignment="VerticalAlignment.Center">
+        <FluentGrid>
+            <FluentGridItem md="12">
+                @if (!_loaded)
+                {
+                    <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+                        <FluentProgressRing style="width: 102px; height: 102px;"></FluentProgressRing>
+                    </FluentStack>
+                }
+                else
+                {
+                    <FluentDataGrid Items="@UserRolesList.AsQueryable()" ShowHover="@SelectFromEntireRow" TGridItem="UserRoleModel">
+                        <SelectColumn TGridItem="UserRoleModel"
+                                      SelectMode="@Mode"
+                                      SelectFromEntireRow="@SelectFromEntireRow"
+                                      Property="@(e => e.Selected)"
+                                      OnSelect="@(e => e.Item.Selected = e.Selected)"
+                                      SelectAll="@(UserRolesList.All(p => p.Selected))"
+                                      SelectAllChanged="@(all => UserRolesList.ToList().ForEach(p => p.Selected = (all == true)))" />
+                        <PropertyColumn Width="100px" Property="@(p => p.RoleName)" Title="Role Name" />
+                        <PropertyColumn Width="300px" Property="@(p => p.RoleDescription)" />
+                    </FluentDataGrid>
+                }
+               
+            </FluentGridItem>
+        </FluentGrid>
+    </FluentStack>
+    <FluentDialogFooter>
+        <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" IconStart="@(new Microsoft.FluentUI.AspNetCore.Components.Icons.Regular.Size20.Save())">Save</FluentButton>
+        <FluentButton Appearance="Appearance.Neutral" OnClick="@CancelAsync">Cancel</FluentButton>
+    </FluentDialogFooter>
+</EditForm>
+@code {
+    [Parameter]
+    public UpdateUserRolesRequest Content { get; set; } = default!;
+    [Inject] private IUserManager manager { get; set; } = default!;
+
+    bool UseSelectedItems = true;
+    bool SelectFromEntireRow = true;
+    DataGridSelectMode Mode = DataGridSelectMode.Multiple;
+    private List<UserRoleModel> UserRolesList = new();
+    List<UserRoleModel> SelectedItems = new();
+
+    [Parameter] public string Id { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Description { get; set; }
+
+
+    private bool _canEditUsers;
+    private bool _canSearchRoles;
+    private bool _loaded;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var _currentUser = await _authenticationManager.CurrentUser();
+        _canEditUsers = (await _authorizationService.AuthorizeAsync(_currentUser, FoodShopBilling.Shared.Constants.Permission.Permissions.Users.Edit)).Succeeded;
+        _canSearchRoles = (await _authorizationService.AuthorizeAsync(_currentUser, FoodShopBilling.Shared.Constants.Permission.Permissions.Roles.Search)).Succeeded;
+
+        var userId = Dialog.Instance.Parameters.Id;
+        var result = await _userManager.GetAsync(userId);
+        if (result.Succeeded)
+        {
+            var user = result.Data;
+            if (user != null)
+            {
+                Title = $"{user.UserName}";
+                Description = string.Format("Manage {0} 's Roles", user.UserName);
+                var response = await _userManager.GetRolesAsync(user.Id.ToString());
+                UserRolesList = response.Data.UserRoles;
+            }
+        }
+        _loaded = true;
+    }
+
+    private void ResetSelectItems()
+    {
+        UserRolesList.ToList().ForEach(i => i.Selected = false);
+        UserRolesList.First().Selected = true;
+        SelectedItems = UserRolesList.Where(p => p.Selected).ToList();
+    }
+
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+
+    private async Task SaveAsync()
+    {
+        var request = new UpdateUserRolesRequest()
+            {
+                UserId = Dialog.Instance.Parameters.Id,
+                UserRoles = UserRolesList
+            };
+        var res = await manager.UpdateRolesAsync(request);
+        if (res.Succeeded)
+        {
+            ToastService.ShowSuccess(res!.Messages[0], 7000);
+            await Dialog.CloseAsync(Content);
+        }
+        else
+        {
+            ToastService.ShowError(res!.Messages[0], 7000);
+        }
+
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
+}
